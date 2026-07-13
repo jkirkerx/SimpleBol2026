@@ -1,0 +1,84 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Title>simple bol</Title>
+    <Product>simple bol</Product>
+    <AssemblyName>SimpleBol</AssemblyName>
+    <Company>jKirkerx®</Company>
+    <Copyright>Copyright © $(Company)</Copyright>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <UseWPF>True</UseWPF>
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
+    <AppVersion>1.0.0.1</AppVersion>
+    <Version>$(AppVersion)</Version>
+    <AssemblyVersion>$(AppVersion)</AssemblyVersion>
+    <FileVersion>$(AppVersion)</FileVersion>
+    <ApplicationIcon>Assets\Artwork\simpleBolIcon512.ico</ApplicationIcon>
+    <Description>A simple program to help you generate BOLs for your global shipping needs</Description>
+    <PackageIcon>simpleBolIcon512.png</PackageIcon>
+    <DefaultItemExcludes>$(DefaultItemExcludes);SimpleBol.PrintNotifications\**;SimpleBol.Installer\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\EmailTemplates\bolBillingIssueToShipper.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Artwork\simpleBolIcon512.ico" />
+    <Content Include="Assets\EmailTemplates\bolBillingIssueToShipper.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ceTe.DynamicPDF.CoreSuite.NET" Version="12.45.0" />
+    <PackageReference Include="CountryCollection" Version="1.1.0" />
+    <PackageReference Include="CountryRegion" Version="1.1.1" />
+    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.74.0.4162" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Graph" Version="6.2.0" />
+    <PackageReference Include="Microsoft.Graph.Core" Version="4.0.1" />
+    <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="4.12.2" />
+    <PackageReference Include="MimeKit" Version="4.17.0" />
+    <PackageReference Include="MongoDB.Bson" Version="3.10.0" />
+    <PackageReference Include="MongoDB.Driver" Version="3.10.0" />
+    <PackageReference Include="NLog" Version="6.1.4" />
+    <PackageReference Include="NLog.Windows.Forms" Version="6.1.1" />
+    <PackageReference Include="SendGrid" Version="9.29.3" />
+    <PackageReference Include="SendGrid.SmtpApi" Version="1.4.6" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Artwork\simpleBolIcon512.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
