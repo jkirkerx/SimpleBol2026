@@ -81,6 +81,7 @@ namespace SimpleBol
             services.AddTransient<BillToAccountDialog>();            
             services.AddTransient<LoginDialog>();
             services.AddTransient<PrintBolDialog>();
+            services.AddTransient<EmailBolDialog>();
             services.AddTransient<ProgressDialog>();
             services.AddTransient<NmfcFreightCodesForm>();
             services.AddTransient<NmfcFreightCodeDialog>();

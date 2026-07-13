@@ -58,6 +58,8 @@ namespace SimpleBol.WinForms.Dialogs
 
             // Satisfies the Compiler, but we set this in BolDialog_Load
             this.bolUnitOfMeasurement = "";
+            buttonEmail.DialogResult = DialogResult.None;
+            buttonEmail.Click += ButtonEmail_Click;
 
         }
 
@@ -1799,16 +1801,34 @@ namespace SimpleBol.WinForms.Dialogs
         #endregion
         #region Packages
 
+        private void PositionFreightEditor(Form editor)
+        {
+            const int horizontalGap = 12;
+            var workingArea = Screen.FromControl(this).WorkingArea;
+            var listColumnBounds = groupBoxContainers.RectangleToScreen(
+                groupBoxContainers.ClientRectangle);
+
+            var x = listColumnBounds.Right + horizontalGap;
+            var y = listColumnBounds.Top;
+
+            // Keep the complete dialog visible when the BOL editor is near a screen edge.
+            x = Math.Clamp(x, workingArea.Left, workingArea.Right - editor.Width);
+            y = Math.Clamp(y, workingArea.Top, workingArea.Bottom - editor.Height);
+
+            editor.StartPosition = FormStartPosition.Manual;
+            editor.Location = new Point(x, y);
+        }
+
         private void ButtonAddPackage_Click(object sender, EventArgs e)
         {
             if (serviceProvider != null)
             {
                 using var packageDialogDIOwned = serviceProvider.CreateOwnedForm<PackageDialog>();
                 var packageDialogDI = packageDialogDIOwned.Form;
-                packageDialogDI.StartPosition = FormStartPosition.CenterScreen;
                 packageDialogDI.FormBorderStyle = FormBorderStyle.FixedDialog;
                 packageDialogDI.TopMost = true;
                 packageDialogDI.PackageId = "ADD";
+                PositionFreightEditor(packageDialogDI);
                 packageDialogDI.Refresh();
 
                 if (packageDialogDI.ShowDialog() == DialogResult.OK)
@@ -1862,9 +1882,9 @@ namespace SimpleBol.WinForms.Dialogs
                         {
                             using var packageDialogDIOwned = serviceProvider.CreateOwnedForm<PackageDialog>();
                 var packageDialogDI = packageDialogDIOwned.Form;
-                            packageDialogDI.StartPosition = FormStartPosition.CenterScreen;
                             packageDialogDI.PackageId = objectId;
                             packageDialogDI.Package = packageObject;
+                            PositionFreightEditor(packageDialogDI);
                             if (packageDialogDI.ShowDialog() == DialogResult.OK)
                             {
                                 var package = packageDialogDI.Package;
@@ -2037,10 +2057,10 @@ namespace SimpleBol.WinForms.Dialogs
             {
                 using var palletDialogDIOwned = serviceProvider.CreateOwnedForm<PalletDialog>();
                 var palletDialogDI = palletDialogDIOwned.Form;
-                palletDialogDI.StartPosition = FormStartPosition.CenterScreen;
                 palletDialogDI.FormBorderStyle = FormBorderStyle.FixedDialog;
                 palletDialogDI.TopMost = true;
                 palletDialogDI.PalletId = "ADD";
+                PositionFreightEditor(palletDialogDI);
                 palletDialogDI.Refresh();
 
                 if (palletDialogDI.ShowDialog() == DialogResult.OK)
@@ -2096,9 +2116,9 @@ namespace SimpleBol.WinForms.Dialogs
                         {
                             using var palletDialogDIOwned = serviceProvider.CreateOwnedForm<PalletDialog>();
                 var palletDialogDI = palletDialogDIOwned.Form;
-                            palletDialogDI.StartPosition = FormStartPosition.CenterScreen;
                             palletDialogDI.PalletId = objectId;
                             palletDialogDI.Pallet = palletObject;
+                            PositionFreightEditor(palletDialogDI);
                             if (palletDialogDI.ShowDialog() == DialogResult.OK)
                             {
                                 var pallet = palletDialogDI.Pallet;
@@ -3480,6 +3500,51 @@ namespace SimpleBol.WinForms.Dialogs
 
         #endregion
         #region Print
+
+        private async void ButtonEmail_Click(object? sender, EventArgs e)
+        {
+            if (BolId == "ADD")
+            {
+                MessageBox.Show("Save the BOL before emailing it.", Application.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (serviceProvider == null || bolRepository == null)
+                return;
+
+            var bol = await bolRepository.GetOneBillOfLaddingAsync(BolId);
+            if (bol == null)
+            {
+                MessageBox.Show("The BOL could not be loaded.", Application.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var customerId = bol.CustomerId ?? bol.ShipToId;
+            var customer = bol.Customer ?? bol.ShipToCustomer;
+            if (customer == null && customerRepository != null &&
+                !string.IsNullOrWhiteSpace(customerId))
+            {
+                customer = await customerRepository.GetOneCustomerAsync(customerId);
+            }
+
+            if (customer == null || string.IsNullOrWhiteSpace(customerId))
+            {
+                MessageBox.Show("This BOL does not have a customer to email.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using var emailBolDialogOwned = serviceProvider.CreateOwnedForm<EmailBolDialog>();
+            var emailBolDialog = emailBolDialogOwned.Form;
+            emailBolDialog.StartPosition = FormStartPosition.CenterParent;
+            emailBolDialog.CustomerId = customerId;
+            emailBolDialog.customer = customer;
+            emailBolDialog.EmailBolId = BolId;
+            emailBolDialog.EmailBol = bol;
+            emailBolDialog.ShowDialog(this);
+        }
 
         private async void ButtonPrint_Click(global::System.Object sender, global::System.EventArgs e)
         {

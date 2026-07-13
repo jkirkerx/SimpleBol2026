@@ -172,6 +172,7 @@
             labelChangePending = new Label();
             errorProvider1 = new ErrorProvider(components);
             buttonPrint = new Button();
+            buttonEmail = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxUpdateFlag).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PbLogo).BeginInit();
@@ -216,7 +217,7 @@
             // labelUnitOfMeasurement
             // 
             labelUnitOfMeasurement.AutoSize = true;
-            labelUnitOfMeasurement.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
+            labelUnitOfMeasurement.Font = new Font("Segoe UI", 22F);
             labelUnitOfMeasurement.Location = new Point(1460, 14);
             labelUnitOfMeasurement.Name = "labelUnitOfMeasurement";
             labelUnitOfMeasurement.Size = new Size(65, 41);
@@ -226,7 +227,7 @@
             // labelBolTotalWeight
             // 
             labelBolTotalWeight.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            labelBolTotalWeight.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBolTotalWeight.Font = new Font("Segoe UI", 22F);
             labelBolTotalWeight.Location = new Point(1145, 14);
             labelBolTotalWeight.Name = "labelBolTotalWeight";
             labelBolTotalWeight.RightToLeft = RightToLeft.Yes;
@@ -250,7 +251,7 @@
             // labelHeader
             // 
             labelHeader.AutoSize = true;
-            labelHeader.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
+            labelHeader.Font = new Font("Segoe UI", 24F);
             labelHeader.ForeColor = Color.White;
             labelHeader.Location = new Point(120, 14);
             labelHeader.Name = "labelHeader";
@@ -274,9 +275,9 @@
             // 
             labelComments.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             labelComments.AutoSize = true;
-            labelComments.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelComments.Font = new Font("Segoe UI", 11F);
             labelComments.ForeColor = Color.White;
-            labelComments.Location = new Point(23, 952);
+            labelComments.Location = new Point(32, 952);
             labelComments.Name = "labelComments";
             labelComments.Size = new Size(80, 20);
             labelComments.TabIndex = 32;
@@ -285,12 +286,12 @@
             // textBoxComments
             // 
             textBoxComments.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            textBoxComments.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            textBoxComments.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             textBoxComments.Location = new Point(27, 982);
             textBoxComments.Margin = new Padding(3, 4, 3, 4);
             textBoxComments.Multiline = true;
             textBoxComments.Name = "textBoxComments";
-            textBoxComments.Size = new Size(688, 100);
+            textBoxComments.Size = new Size(333, 100);
             textBoxComments.TabIndex = 74;
             // 
             // OK_Button
@@ -304,7 +305,7 @@
             OK_Button.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             OK_Button.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             OK_Button.FlatStyle = FlatStyle.Flat;
-            OK_Button.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            OK_Button.Font = new Font("Segoe UI", 12F);
             OK_Button.ForeColor = Color.White;
             OK_Button.Location = new Point(1336, 1031);
             OK_Button.Margin = new Padding(3, 4, 3, 4);
@@ -327,7 +328,7 @@
             Cancel_Button.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             Cancel_Button.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             Cancel_Button.FlatStyle = FlatStyle.Flat;
-            Cancel_Button.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            Cancel_Button.Font = new Font("Segoe UI", 12F);
             Cancel_Button.ForeColor = Color.White;
             Cancel_Button.Location = new Point(1474, 1031);
             Cancel_Button.Margin = new Padding(3, 4, 3, 4);
@@ -349,7 +350,7 @@
             groupBoxCustomer.Controls.Add(buttonAddShipTo);
             groupBoxCustomer.Controls.Add(labelSelectCustomer);
             groupBoxCustomer.Controls.Add(comboBoxCustomers);
-            groupBoxCustomer.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxCustomer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxCustomer.ForeColor = Color.LightBlue;
             groupBoxCustomer.Location = new Point(382, 418);
             groupBoxCustomer.Name = "groupBoxCustomer";
@@ -361,7 +362,7 @@
             // checkBoxShipToPalletJackRequired
             // 
             checkBoxShipToPalletJackRequired.AutoSize = true;
-            checkBoxShipToPalletJackRequired.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxShipToPalletJackRequired.Font = new Font("Segoe UI", 11F);
             checkBoxShipToPalletJackRequired.ForeColor = Color.White;
             checkBoxShipToPalletJackRequired.Location = new Point(201, 306);
             checkBoxShipToPalletJackRequired.Name = "checkBoxShipToPalletJackRequired";
@@ -384,7 +385,7 @@
             // labelShiptoAppointmentTime
             // 
             labelShiptoAppointmentTime.AutoSize = true;
-            labelShiptoAppointmentTime.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShiptoAppointmentTime.Font = new Font("Segoe UI", 11F);
             labelShiptoAppointmentTime.ForeColor = Color.White;
             labelShiptoAppointmentTime.Location = new Point(12, 75);
             labelShiptoAppointmentTime.Name = "labelShiptoAppointmentTime";
@@ -405,7 +406,7 @@
             // labelShipToAppointmentDAte
             // 
             labelShipToAppointmentDAte.AutoSize = true;
-            labelShipToAppointmentDAte.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToAppointmentDAte.Font = new Font("Segoe UI", 11F);
             labelShipToAppointmentDAte.ForeColor = Color.White;
             labelShipToAppointmentDAte.Location = new Point(15, 8);
             labelShipToAppointmentDAte.Name = "labelShipToAppointmentDAte";
@@ -423,7 +424,7 @@
             // checkBoxShipToAppointmentRequired
             // 
             checkBoxShipToAppointmentRequired.AutoSize = true;
-            checkBoxShipToAppointmentRequired.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxShipToAppointmentRequired.Font = new Font("Segoe UI", 11F);
             checkBoxShipToAppointmentRequired.ForeColor = Color.White;
             checkBoxShipToAppointmentRequired.Location = new Point(22, 337);
             checkBoxShipToAppointmentRequired.Name = "checkBoxShipToAppointmentRequired";
@@ -436,7 +437,7 @@
             // checkBoxShipToLiftGateRequired
             // 
             checkBoxShipToLiftGateRequired.AutoSize = true;
-            checkBoxShipToLiftGateRequired.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxShipToLiftGateRequired.Font = new Font("Segoe UI", 11F);
             checkBoxShipToLiftGateRequired.ForeColor = Color.White;
             checkBoxShipToLiftGateRequired.Location = new Point(22, 306);
             checkBoxShipToLiftGateRequired.Name = "checkBoxShipToLiftGateRequired";
@@ -457,7 +458,7 @@
             // labelShipToLocation
             // 
             labelShipToLocation.AutoSize = true;
-            labelShipToLocation.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToLocation.Font = new Font("Segoe UI", 11F);
             labelShipToLocation.ForeColor = Color.White;
             labelShipToLocation.Location = new Point(3, 4);
             labelShipToLocation.Name = "labelShipToLocation";
@@ -491,7 +492,7 @@
             // labelShipToPostalCode
             // 
             labelShipToPostalCode.AutoSize = true;
-            labelShipToPostalCode.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToPostalCode.Font = new Font("Segoe UI", 11F);
             labelShipToPostalCode.Location = new Point(17, 89);
             labelShipToPostalCode.Name = "labelShipToPostalCode";
             labelShipToPostalCode.Size = new Size(48, 20);
@@ -501,7 +502,7 @@
             // labelShipToCountry
             // 
             labelShipToCountry.AutoSize = true;
-            labelShipToCountry.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToCountry.Font = new Font("Segoe UI", 11F);
             labelShipToCountry.Location = new Point(184, 89);
             labelShipToCountry.Name = "labelShipToCountry";
             labelShipToCountry.Size = new Size(95, 20);
@@ -511,7 +512,7 @@
             // labelShipToRegion
             // 
             labelShipToRegion.AutoSize = true;
-            labelShipToRegion.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToRegion.Font = new Font("Segoe UI", 11F);
             labelShipToRegion.Location = new Point(184, 59);
             labelShipToRegion.Name = "labelShipToRegion";
             labelShipToRegion.Size = new Size(91, 20);
@@ -521,7 +522,7 @@
             // labelShipToCity
             // 
             labelShipToCity.AutoSize = true;
-            labelShipToCity.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToCity.Font = new Font("Segoe UI", 11F);
             labelShipToCity.Location = new Point(17, 59);
             labelShipToCity.Name = "labelShipToCity";
             labelShipToCity.Size = new Size(34, 20);
@@ -531,7 +532,7 @@
             // labelShipToAddress
             // 
             labelShipToAddress.AutoSize = true;
-            labelShipToAddress.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToAddress.Font = new Font("Segoe UI", 11F);
             labelShipToAddress.Location = new Point(17, 33);
             labelShipToAddress.Name = "labelShipToAddress";
             labelShipToAddress.Size = new Size(62, 20);
@@ -541,7 +542,7 @@
             // labelShipToName
             // 
             labelShipToName.AutoSize = true;
-            labelShipToName.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipToName.Font = new Font("Segoe UI", 11F);
             labelShipToName.Location = new Point(17, 7);
             labelShipToName.Name = "labelShipToName";
             labelShipToName.Size = new Size(49, 20);
@@ -556,7 +557,7 @@
             buttonAddShipTo.FlatAppearance.MouseDownBackColor = Color.Black;
             buttonAddShipTo.FlatAppearance.MouseOverBackColor = Color.Black;
             buttonAddShipTo.FlatStyle = FlatStyle.Flat;
-            buttonAddShipTo.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonAddShipTo.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAddShipTo.Location = new Point(282, 24);
             buttonAddShipTo.Name = "buttonAddShipTo";
             buttonAddShipTo.Size = new Size(29, 28);
@@ -568,7 +569,7 @@
             // labelSelectCustomer
             // 
             labelSelectCustomer.AutoSize = true;
-            labelSelectCustomer.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelSelectCustomer.Font = new Font("Segoe UI", 11F);
             labelSelectCustomer.ForeColor = Color.White;
             labelSelectCustomer.Location = new Point(22, 32);
             labelSelectCustomer.Name = "labelSelectCustomer";
@@ -591,7 +592,7 @@
             groupBoxShipper.Controls.Add(buttonAddShipper);
             groupBoxShipper.Controls.Add(labelShippers);
             groupBoxShipper.Controls.Add(comboBoxShippers);
-            groupBoxShipper.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxShipper.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxShipper.ForeColor = Color.AntiqueWhite;
             groupBoxShipper.Location = new Point(27, 173);
             groupBoxShipper.Name = "groupBoxShipper";
@@ -617,7 +618,7 @@
             // labelShipperPostalCode
             // 
             labelShipperPostalCode.AutoSize = true;
-            labelShipperPostalCode.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipperPostalCode.Font = new Font("Segoe UI", 11F);
             labelShipperPostalCode.Location = new Point(18, 91);
             labelShipperPostalCode.Name = "labelShipperPostalCode";
             labelShipperPostalCode.Size = new Size(48, 20);
@@ -627,7 +628,7 @@
             // labelShipperCountry
             // 
             labelShipperCountry.AutoSize = true;
-            labelShipperCountry.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipperCountry.Font = new Font("Segoe UI", 11F);
             labelShipperCountry.Location = new Point(185, 91);
             labelShipperCountry.Name = "labelShipperCountry";
             labelShipperCountry.Size = new Size(95, 20);
@@ -637,7 +638,7 @@
             // labelShipperRegion
             // 
             labelShipperRegion.AutoSize = true;
-            labelShipperRegion.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipperRegion.Font = new Font("Segoe UI", 11F);
             labelShipperRegion.Location = new Point(185, 61);
             labelShipperRegion.Name = "labelShipperRegion";
             labelShipperRegion.Size = new Size(91, 20);
@@ -647,7 +648,7 @@
             // labelShipperCity
             // 
             labelShipperCity.AutoSize = true;
-            labelShipperCity.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipperCity.Font = new Font("Segoe UI", 11F);
             labelShipperCity.Location = new Point(18, 61);
             labelShipperCity.Name = "labelShipperCity";
             labelShipperCity.Size = new Size(34, 20);
@@ -657,7 +658,7 @@
             // labelShipperAddress
             // 
             labelShipperAddress.AutoSize = true;
-            labelShipperAddress.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipperAddress.Font = new Font("Segoe UI", 11F);
             labelShipperAddress.Location = new Point(18, 35);
             labelShipperAddress.Name = "labelShipperAddress";
             labelShipperAddress.Size = new Size(62, 20);
@@ -667,7 +668,7 @@
             // labelShipperName
             // 
             labelShipperName.AutoSize = true;
-            labelShipperName.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipperName.Font = new Font("Segoe UI", 11F);
             labelShipperName.Location = new Point(18, 9);
             labelShipperName.Name = "labelShipperName";
             labelShipperName.Size = new Size(49, 20);
@@ -682,7 +683,7 @@
             buttonAddShipper.FlatAppearance.MouseDownBackColor = Color.Black;
             buttonAddShipper.FlatAppearance.MouseOverBackColor = Color.Black;
             buttonAddShipper.FlatStyle = FlatStyle.Flat;
-            buttonAddShipper.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonAddShipper.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAddShipper.Location = new Point(282, 24);
             buttonAddShipper.Name = "buttonAddShipper";
             buttonAddShipper.Size = new Size(29, 28);
@@ -694,7 +695,7 @@
             // labelShippers
             // 
             labelShippers.AutoSize = true;
-            labelShippers.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShippers.Font = new Font("Segoe UI", 11F);
             labelShippers.ForeColor = Color.White;
             labelShippers.Location = new Point(22, 32);
             labelShippers.Name = "labelShippers";
@@ -717,7 +718,7 @@
             groupBoxBillTo.Controls.Add(buttonAddBilling);
             groupBoxBillTo.Controls.Add(labelBillTo);
             groupBoxBillTo.Controls.Add(comboBox3rdPartyBillling);
-            groupBoxBillTo.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxBillTo.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxBillTo.ForeColor = Color.AntiqueWhite;
             groupBoxBillTo.Location = new Point(382, 173);
             groupBoxBillTo.Name = "groupBoxBillTo";
@@ -743,7 +744,7 @@
             // labelBillToPostalCode
             // 
             labelBillToPostalCode.AutoSize = true;
-            labelBillToPostalCode.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBillToPostalCode.Font = new Font("Segoe UI", 11F);
             labelBillToPostalCode.Location = new Point(17, 92);
             labelBillToPostalCode.Name = "labelBillToPostalCode";
             labelBillToPostalCode.Size = new Size(48, 20);
@@ -753,7 +754,7 @@
             // labelBillToCountry
             // 
             labelBillToCountry.AutoSize = true;
-            labelBillToCountry.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBillToCountry.Font = new Font("Segoe UI", 11F);
             labelBillToCountry.Location = new Point(184, 92);
             labelBillToCountry.Name = "labelBillToCountry";
             labelBillToCountry.Size = new Size(95, 20);
@@ -763,7 +764,7 @@
             // labelBillToRegion
             // 
             labelBillToRegion.AutoSize = true;
-            labelBillToRegion.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBillToRegion.Font = new Font("Segoe UI", 11F);
             labelBillToRegion.Location = new Point(184, 62);
             labelBillToRegion.Name = "labelBillToRegion";
             labelBillToRegion.Size = new Size(91, 20);
@@ -773,7 +774,7 @@
             // labelBillToCity
             // 
             labelBillToCity.AutoSize = true;
-            labelBillToCity.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBillToCity.Font = new Font("Segoe UI", 11F);
             labelBillToCity.Location = new Point(17, 62);
             labelBillToCity.Name = "labelBillToCity";
             labelBillToCity.Size = new Size(34, 20);
@@ -783,7 +784,7 @@
             // labelBillToAddress
             // 
             labelBillToAddress.AutoSize = true;
-            labelBillToAddress.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBillToAddress.Font = new Font("Segoe UI", 11F);
             labelBillToAddress.Location = new Point(17, 36);
             labelBillToAddress.Name = "labelBillToAddress";
             labelBillToAddress.Size = new Size(62, 20);
@@ -793,7 +794,7 @@
             // labelBillToName
             // 
             labelBillToName.AutoSize = true;
-            labelBillToName.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBillToName.Font = new Font("Segoe UI", 11F);
             labelBillToName.Location = new Point(17, 10);
             labelBillToName.Name = "labelBillToName";
             labelBillToName.Size = new Size(49, 20);
@@ -808,7 +809,7 @@
             buttonAddBilling.FlatAppearance.MouseDownBackColor = Color.Black;
             buttonAddBilling.FlatAppearance.MouseOverBackColor = Color.Black;
             buttonAddBilling.FlatStyle = FlatStyle.Flat;
-            buttonAddBilling.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonAddBilling.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAddBilling.Location = new Point(282, 24);
             buttonAddBilling.Name = "buttonAddBilling";
             buttonAddBilling.Size = new Size(29, 28);
@@ -820,7 +821,7 @@
             // labelBillTo
             // 
             labelBillTo.AutoSize = true;
-            labelBillTo.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBillTo.Font = new Font("Segoe UI", 11F);
             labelBillTo.ForeColor = Color.White;
             labelBillTo.Location = new Point(22, 32);
             labelBillTo.Name = "labelBillTo";
@@ -844,7 +845,7 @@
             groupBoxPallets.Controls.Add(buttonRemovePallet);
             groupBoxPallets.Controls.Add(buttonAddPallet);
             groupBoxPallets.Controls.Add(listViewPallets);
-            groupBoxPallets.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxPallets.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxPallets.ForeColor = Color.DarkKhaki;
             groupBoxPallets.Location = new Point(739, 418);
             groupBoxPallets.Name = "groupBoxPallets";
@@ -880,7 +881,7 @@
             buttonEditPallet.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonEditPallet.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonEditPallet.FlatStyle = FlatStyle.Flat;
-            buttonEditPallet.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonEditPallet.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonEditPallet.ForeColor = Color.White;
             buttonEditPallet.Location = new Point(100, 32);
             buttonEditPallet.Name = "buttonEditPallet";
@@ -898,7 +899,7 @@
             buttonRemovePallet.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonRemovePallet.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonRemovePallet.FlatStyle = FlatStyle.Flat;
-            buttonRemovePallet.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonRemovePallet.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonRemovePallet.ForeColor = Color.White;
             buttonRemovePallet.Location = new Point(183, 32);
             buttonRemovePallet.Name = "buttonRemovePallet";
@@ -916,7 +917,7 @@
             buttonAddPallet.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonAddPallet.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonAddPallet.FlatStyle = FlatStyle.Flat;
-            buttonAddPallet.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonAddPallet.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonAddPallet.ForeColor = Color.White;
             buttonAddPallet.Location = new Point(17, 32);
             buttonAddPallet.Name = "buttonAddPallet";
@@ -945,7 +946,7 @@
             groupBoxPackages.Controls.Add(buttonRemovePackage);
             groupBoxPackages.Controls.Add(buttonAddPackage);
             groupBoxPackages.Controls.Add(listViewPackages);
-            groupBoxPackages.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxPackages.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxPackages.ForeColor = Color.DarkKhaki;
             groupBoxPackages.Location = new Point(739, 672);
             groupBoxPackages.Name = "groupBoxPackages";
@@ -981,7 +982,7 @@
             buttonEditPackage.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonEditPackage.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonEditPackage.FlatStyle = FlatStyle.Flat;
-            buttonEditPackage.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonEditPackage.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonEditPackage.ForeColor = Color.White;
             buttonEditPackage.Location = new Point(99, 32);
             buttonEditPackage.Name = "buttonEditPackage";
@@ -999,7 +1000,7 @@
             buttonRemovePackage.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonRemovePackage.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonRemovePackage.FlatStyle = FlatStyle.Flat;
-            buttonRemovePackage.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonRemovePackage.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonRemovePackage.ForeColor = Color.White;
             buttonRemovePackage.Location = new Point(182, 32);
             buttonRemovePackage.Name = "buttonRemovePackage";
@@ -1017,7 +1018,7 @@
             buttonAddPackage.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonAddPackage.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonAddPackage.FlatStyle = FlatStyle.Flat;
-            buttonAddPackage.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonAddPackage.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonAddPackage.ForeColor = Color.White;
             buttonAddPackage.Location = new Point(16, 32);
             buttonAddPackage.Name = "buttonAddPackage";
@@ -1050,7 +1051,7 @@
             groupBoxShipFrom.Controls.Add(buttonAddShipFrom);
             groupBoxShipFrom.Controls.Add(labelShipFromVendor);
             groupBoxShipFrom.Controls.Add(comboBoxVendors);
-            groupBoxShipFrom.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxShipFrom.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxShipFrom.ForeColor = Color.LightSkyBlue;
             groupBoxShipFrom.Location = new Point(27, 418);
             groupBoxShipFrom.Name = "groupBoxShipFrom";
@@ -1062,7 +1063,7 @@
             // checkBoxShipFromPalletJackRequired
             // 
             checkBoxShipFromPalletJackRequired.AutoSize = true;
-            checkBoxShipFromPalletJackRequired.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxShipFromPalletJackRequired.Font = new Font("Segoe UI", 11F);
             checkBoxShipFromPalletJackRequired.ForeColor = Color.White;
             checkBoxShipFromPalletJackRequired.Location = new Point(204, 306);
             checkBoxShipFromPalletJackRequired.Name = "checkBoxShipFromPalletJackRequired";
@@ -1085,7 +1086,7 @@
             // labelShipFromAppointmentTime
             // 
             labelShipFromAppointmentTime.AutoSize = true;
-            labelShipFromAppointmentTime.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromAppointmentTime.Font = new Font("Segoe UI", 11F);
             labelShipFromAppointmentTime.ForeColor = Color.White;
             labelShipFromAppointmentTime.Location = new Point(15, 75);
             labelShipFromAppointmentTime.Name = "labelShipFromAppointmentTime";
@@ -1106,7 +1107,7 @@
             // labelShipFromAppointmentDate
             // 
             labelShipFromAppointmentDate.AutoSize = true;
-            labelShipFromAppointmentDate.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromAppointmentDate.Font = new Font("Segoe UI", 11F);
             labelShipFromAppointmentDate.ForeColor = Color.White;
             labelShipFromAppointmentDate.Location = new Point(18, 8);
             labelShipFromAppointmentDate.Name = "labelShipFromAppointmentDate";
@@ -1124,7 +1125,7 @@
             // checkBoxShipFromAppointmentRequired
             // 
             checkBoxShipFromAppointmentRequired.AutoSize = true;
-            checkBoxShipFromAppointmentRequired.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxShipFromAppointmentRequired.Font = new Font("Segoe UI", 11F);
             checkBoxShipFromAppointmentRequired.ForeColor = Color.White;
             checkBoxShipFromAppointmentRequired.Location = new Point(24, 337);
             checkBoxShipFromAppointmentRequired.Name = "checkBoxShipFromAppointmentRequired";
@@ -1137,7 +1138,7 @@
             // checkBoxShipFromLiftGateRequired
             // 
             checkBoxShipFromLiftGateRequired.AutoSize = true;
-            checkBoxShipFromLiftGateRequired.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxShipFromLiftGateRequired.Font = new Font("Segoe UI", 11F);
             checkBoxShipFromLiftGateRequired.ForeColor = Color.White;
             checkBoxShipFromLiftGateRequired.Location = new Point(24, 306);
             checkBoxShipFromLiftGateRequired.Name = "checkBoxShipFromLiftGateRequired";
@@ -1158,7 +1159,7 @@
             // labelShipFromLocations
             // 
             labelShipFromLocations.AutoSize = true;
-            labelShipFromLocations.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromLocations.Font = new Font("Segoe UI", 11F);
             labelShipFromLocations.ForeColor = Color.White;
             labelShipFromLocations.Location = new Point(9, 4);
             labelShipFromLocations.Name = "labelShipFromLocations";
@@ -1192,7 +1193,7 @@
             // labelShipFromPostalCode
             // 
             labelShipFromPostalCode.AutoSize = true;
-            labelShipFromPostalCode.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromPostalCode.Font = new Font("Segoe UI", 11F);
             labelShipFromPostalCode.Location = new Point(18, 92);
             labelShipFromPostalCode.Name = "labelShipFromPostalCode";
             labelShipFromPostalCode.Size = new Size(48, 20);
@@ -1202,7 +1203,7 @@
             // labelShipFromCountry
             // 
             labelShipFromCountry.AutoSize = true;
-            labelShipFromCountry.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromCountry.Font = new Font("Segoe UI", 11F);
             labelShipFromCountry.Location = new Point(185, 92);
             labelShipFromCountry.Name = "labelShipFromCountry";
             labelShipFromCountry.Size = new Size(95, 20);
@@ -1212,7 +1213,7 @@
             // labelShipFromRegion
             // 
             labelShipFromRegion.AutoSize = true;
-            labelShipFromRegion.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromRegion.Font = new Font("Segoe UI", 11F);
             labelShipFromRegion.Location = new Point(185, 62);
             labelShipFromRegion.Name = "labelShipFromRegion";
             labelShipFromRegion.Size = new Size(91, 20);
@@ -1222,7 +1223,7 @@
             // labelShipFromCity
             // 
             labelShipFromCity.AutoSize = true;
-            labelShipFromCity.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromCity.Font = new Font("Segoe UI", 11F);
             labelShipFromCity.Location = new Point(18, 62);
             labelShipFromCity.Name = "labelShipFromCity";
             labelShipFromCity.Size = new Size(34, 20);
@@ -1232,7 +1233,7 @@
             // labelShipFromAddress
             // 
             labelShipFromAddress.AutoSize = true;
-            labelShipFromAddress.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromAddress.Font = new Font("Segoe UI", 11F);
             labelShipFromAddress.Location = new Point(18, 36);
             labelShipFromAddress.Name = "labelShipFromAddress";
             labelShipFromAddress.Size = new Size(62, 20);
@@ -1242,7 +1243,7 @@
             // labelShipFromName
             // 
             labelShipFromName.AutoSize = true;
-            labelShipFromName.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromName.Font = new Font("Segoe UI", 11F);
             labelShipFromName.Location = new Point(18, 10);
             labelShipFromName.Name = "labelShipFromName";
             labelShipFromName.Size = new Size(49, 20);
@@ -1257,7 +1258,7 @@
             buttonAddShipFrom.FlatAppearance.MouseDownBackColor = Color.Black;
             buttonAddShipFrom.FlatAppearance.MouseOverBackColor = Color.Black;
             buttonAddShipFrom.FlatStyle = FlatStyle.Flat;
-            buttonAddShipFrom.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonAddShipFrom.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAddShipFrom.Location = new Point(282, 28);
             buttonAddShipFrom.Name = "buttonAddShipFrom";
             buttonAddShipFrom.Size = new Size(29, 28);
@@ -1269,7 +1270,7 @@
             // labelShipFromVendor
             // 
             labelShipFromVendor.AutoSize = true;
-            labelShipFromVendor.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipFromVendor.Font = new Font("Segoe UI", 11F);
             labelShipFromVendor.ForeColor = Color.White;
             labelShipFromVendor.Location = new Point(22, 32);
             labelShipFromVendor.Name = "labelShipFromVendor";
@@ -1296,7 +1297,7 @@
             groupBoxPayment.Controls.Add(checkBoxFreightPrepaid);
             groupBoxPayment.Controls.Add(maskedTextBoxCodAmount);
             groupBoxPayment.Controls.Add(checkBoxPaymentCOD);
-            groupBoxPayment.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxPayment.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxPayment.ForeColor = Color.AntiqueWhite;
             groupBoxPayment.Location = new Point(1223, 173);
             groupBoxPayment.Name = "groupBoxPayment";
@@ -1308,7 +1309,7 @@
             // labelEstimatedBolWeight
             // 
             labelEstimatedBolWeight.AutoSize = true;
-            labelEstimatedBolWeight.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelEstimatedBolWeight.Font = new Font("Segoe UI", 11F);
             labelEstimatedBolWeight.ForeColor = Color.White;
             labelEstimatedBolWeight.Location = new Point(209, 32);
             labelEstimatedBolWeight.Name = "labelEstimatedBolWeight";
@@ -1328,7 +1329,7 @@
             // labelEstimatedBolValue
             // 
             labelEstimatedBolValue.AutoSize = true;
-            labelEstimatedBolValue.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelEstimatedBolValue.Font = new Font("Segoe UI", 11F);
             labelEstimatedBolValue.ForeColor = Color.White;
             labelEstimatedBolValue.Location = new Point(23, 32);
             labelEstimatedBolValue.Name = "labelEstimatedBolValue";
@@ -1350,7 +1351,7 @@
             // 
             checkBoxCustomerInvoice.AutoSize = true;
             checkBoxCustomerInvoice.CausesValidation = false;
-            checkBoxCustomerInvoice.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxCustomerInvoice.Font = new Font("Segoe UI", 11F);
             checkBoxCustomerInvoice.ForeColor = Color.White;
             checkBoxCustomerInvoice.Location = new Point(205, 104);
             checkBoxCustomerInvoice.Name = "checkBoxCustomerInvoice";
@@ -1364,7 +1365,7 @@
             // 
             checkBoxFreightPrepaid.AutoSize = true;
             checkBoxFreightPrepaid.CausesValidation = false;
-            checkBoxFreightPrepaid.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxFreightPrepaid.Font = new Font("Segoe UI", 11F);
             checkBoxFreightPrepaid.ForeColor = Color.White;
             checkBoxFreightPrepaid.Location = new Point(23, 104);
             checkBoxFreightPrepaid.Name = "checkBoxFreightPrepaid";
@@ -1389,7 +1390,7 @@
             // 
             checkBoxPaymentCOD.AutoSize = true;
             checkBoxPaymentCOD.CausesValidation = false;
-            checkBoxPaymentCOD.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBoxPaymentCOD.Font = new Font("Segoe UI", 11F);
             checkBoxPaymentCOD.ForeColor = Color.White;
             checkBoxPaymentCOD.Location = new Point(23, 134);
             checkBoxPaymentCOD.Name = "checkBoxPaymentCOD";
@@ -1413,7 +1414,7 @@
             groupBoxReferences.Controls.Add(labelActualPrice);
             groupBoxReferences.Controls.Add(maskedTextBoxQuotedPrice);
             groupBoxReferences.Controls.Add(labelQuotedPrice);
-            groupBoxReferences.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxReferences.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxReferences.ForeColor = Color.Thistle;
             groupBoxReferences.Location = new Point(1223, 423);
             groupBoxReferences.Name = "groupBoxReferences";
@@ -1433,7 +1434,7 @@
             // labelBolNumber
             // 
             labelBolNumber.AutoSize = true;
-            labelBolNumber.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelBolNumber.Font = new Font("Segoe UI", 11F);
             labelBolNumber.ForeColor = Color.White;
             labelBolNumber.Location = new Point(209, 30);
             labelBolNumber.Name = "labelBolNumber";
@@ -1452,7 +1453,7 @@
             // labelOrderNumber
             // 
             labelOrderNumber.AutoSize = true;
-            labelOrderNumber.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelOrderNumber.Font = new Font("Segoe UI", 11F);
             labelOrderNumber.ForeColor = Color.White;
             labelOrderNumber.Location = new Point(209, 160);
             labelOrderNumber.Name = "labelOrderNumber";
@@ -1471,7 +1472,7 @@
             // labelShipperQuoteNumber
             // 
             labelShipperQuoteNumber.AutoSize = true;
-            labelShipperQuoteNumber.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelShipperQuoteNumber.Font = new Font("Segoe UI", 11F);
             labelShipperQuoteNumber.ForeColor = Color.White;
             labelShipperQuoteNumber.Location = new Point(28, 32);
             labelShipperQuoteNumber.Name = "labelShipperQuoteNumber";
@@ -1490,7 +1491,7 @@
             // labelReferenceNumber
             // 
             labelReferenceNumber.AutoSize = true;
-            labelReferenceNumber.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelReferenceNumber.Font = new Font("Segoe UI", 11F);
             labelReferenceNumber.ForeColor = Color.White;
             labelReferenceNumber.Location = new Point(28, 160);
             labelReferenceNumber.Name = "labelReferenceNumber";
@@ -1510,7 +1511,7 @@
             // labelActualPrice
             // 
             labelActualPrice.AutoSize = true;
-            labelActualPrice.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelActualPrice.Font = new Font("Segoe UI", 11F);
             labelActualPrice.ForeColor = Color.White;
             labelActualPrice.Location = new Point(209, 97);
             labelActualPrice.Name = "labelActualPrice";
@@ -1530,7 +1531,7 @@
             // labelQuotedPrice
             // 
             labelQuotedPrice.AutoSize = true;
-            labelQuotedPrice.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelQuotedPrice.Font = new Font("Segoe UI", 11F);
             labelQuotedPrice.ForeColor = Color.White;
             labelQuotedPrice.Location = new Point(28, 97);
             labelQuotedPrice.Name = "labelQuotedPrice";
@@ -1548,7 +1549,7 @@
             groupBoxTransitTimes.Controls.Add(dateTimePickerDeliveryDate);
             groupBoxTransitTimes.Controls.Add(labelTransitShipDate);
             groupBoxTransitTimes.Controls.Add(dateTimePickerShipDate);
-            groupBoxTransitTimes.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxTransitTimes.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxTransitTimes.ForeColor = Color.Thistle;
             groupBoxTransitTimes.Location = new Point(1223, 672);
             groupBoxTransitTimes.Name = "groupBoxTransitTimes";
@@ -1569,7 +1570,7 @@
             // labelActualTransitTime
             // 
             labelActualTransitTime.AutoSize = true;
-            labelActualTransitTime.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelActualTransitTime.Font = new Font("Segoe UI", 11F);
             labelActualTransitTime.ForeColor = Color.White;
             labelActualTransitTime.Location = new Point(209, 163);
             labelActualTransitTime.Name = "labelActualTransitTime";
@@ -1589,7 +1590,7 @@
             // labelEstimatedTransitDays
             // 
             labelEstimatedTransitDays.AutoSize = true;
-            labelEstimatedTransitDays.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelEstimatedTransitDays.Font = new Font("Segoe UI", 11F);
             labelEstimatedTransitDays.ForeColor = Color.White;
             labelEstimatedTransitDays.Location = new Point(23, 163);
             labelEstimatedTransitDays.Name = "labelEstimatedTransitDays";
@@ -1600,7 +1601,7 @@
             // labelDeliveryDate
             // 
             labelDeliveryDate.AutoSize = true;
-            labelDeliveryDate.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelDeliveryDate.Font = new Font("Segoe UI", 11F);
             labelDeliveryDate.ForeColor = Color.White;
             labelDeliveryDate.Location = new Point(23, 96);
             labelDeliveryDate.Name = "labelDeliveryDate";
@@ -1620,7 +1621,7 @@
             // labelTransitShipDate
             // 
             labelTransitShipDate.AutoSize = true;
-            labelTransitShipDate.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelTransitShipDate.Font = new Font("Segoe UI", 11F);
             labelTransitShipDate.ForeColor = Color.White;
             labelTransitShipDate.Location = new Point(23, 31);
             labelTransitShipDate.Name = "labelTransitShipDate";
@@ -1640,9 +1641,9 @@
             // 
             labelSpecialInstructions.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             labelSpecialInstructions.AutoSize = true;
-            labelSpecialInstructions.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelSpecialInstructions.Font = new Font("Segoe UI", 11F);
             labelSpecialInstructions.ForeColor = Color.White;
-            labelSpecialInstructions.Location = new Point(739, 952);
+            labelSpecialInstructions.Location = new Point(388, 952);
             labelSpecialInstructions.Name = "labelSpecialInstructions";
             labelSpecialInstructions.Size = new Size(136, 20);
             labelSpecialInstructions.TabIndex = 45;
@@ -1651,12 +1652,12 @@
             // textBoxSpecialInstructions
             // 
             textBoxSpecialInstructions.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            textBoxSpecialInstructions.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            textBoxSpecialInstructions.Location = new Point(739, 982);
+            textBoxSpecialInstructions.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            textBoxSpecialInstructions.Location = new Point(382, 982);
             textBoxSpecialInstructions.Margin = new Padding(3, 4, 3, 4);
             textBoxSpecialInstructions.Multiline = true;
             textBoxSpecialInstructions.Name = "textBoxSpecialInstructions";
-            textBoxSpecialInstructions.Size = new Size(382, 100);
+            textBoxSpecialInstructions.Size = new Size(333, 100);
             textBoxSpecialInstructions.TabIndex = 75;
             // 
             // groupBoxServiceTypes
@@ -1670,7 +1671,7 @@
             groupBoxServiceTypes.Controls.Add(radioButtonOcean);
             groupBoxServiceTypes.Controls.Add(radioButtonAir);
             groupBoxServiceTypes.Controls.Add(radioButtonFTL);
-            groupBoxServiceTypes.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxServiceTypes.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxServiceTypes.ForeColor = Color.Gold;
             groupBoxServiceTypes.Location = new Point(27, 92);
             groupBoxServiceTypes.Name = "groupBoxServiceTypes";
@@ -1684,7 +1685,7 @@
             radioButtonLTL.AutoSize = true;
             radioButtonLTL.FlatAppearance.CheckedBackColor = Color.FromArgb(255, 128, 0);
             radioButtonLTL.FlatStyle = FlatStyle.Popup;
-            radioButtonLTL.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonLTL.Font = new Font("Segoe UI", 11F);
             radioButtonLTL.ForeColor = Color.White;
             radioButtonLTL.Location = new Point(24, 26);
             radioButtonLTL.Name = "radioButtonLTL";
@@ -1700,7 +1701,7 @@
             // 
             radioButtonShowAll.AutoSize = true;
             radioButtonShowAll.FlatStyle = FlatStyle.Popup;
-            radioButtonShowAll.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonShowAll.Font = new Font("Segoe UI", 11F);
             radioButtonShowAll.ForeColor = Color.White;
             radioButtonShowAll.Location = new Point(876, 26);
             radioButtonShowAll.Name = "radioButtonShowAll";
@@ -1716,7 +1717,7 @@
             // 
             radioButtonArmouredCar.AutoSize = true;
             radioButtonArmouredCar.FlatStyle = FlatStyle.Popup;
-            radioButtonArmouredCar.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonArmouredCar.Font = new Font("Segoe UI", 11F);
             radioButtonArmouredCar.ForeColor = Color.White;
             radioButtonArmouredCar.Location = new Point(751, 26);
             radioButtonArmouredCar.Name = "radioButtonArmouredCar";
@@ -1732,7 +1733,7 @@
             // 
             radioButtonCourier.AutoSize = true;
             radioButtonCourier.FlatStyle = FlatStyle.Popup;
-            radioButtonCourier.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonCourier.Font = new Font("Segoe UI", 11F);
             radioButtonCourier.ForeColor = Color.White;
             radioButtonCourier.Location = new Point(647, 26);
             radioButtonCourier.Name = "radioButtonCourier";
@@ -1748,7 +1749,7 @@
             // 
             radioButtonLastMile.AutoSize = true;
             radioButtonLastMile.FlatStyle = FlatStyle.Popup;
-            radioButtonLastMile.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonLastMile.Font = new Font("Segoe UI", 11F);
             radioButtonLastMile.ForeColor = Color.White;
             radioButtonLastMile.Location = new Point(531, 26);
             radioButtonLastMile.Name = "radioButtonLastMile";
@@ -1764,7 +1765,7 @@
             // 
             radioButtonRailroad.AutoSize = true;
             radioButtonRailroad.FlatStyle = FlatStyle.Popup;
-            radioButtonRailroad.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonRailroad.Font = new Font("Segoe UI", 11F);
             radioButtonRailroad.ForeColor = Color.White;
             radioButtonRailroad.Location = new Point(452, 26);
             radioButtonRailroad.Name = "radioButtonRailroad";
@@ -1780,7 +1781,7 @@
             // 
             radioButtonOcean.AutoSize = true;
             radioButtonOcean.FlatStyle = FlatStyle.Popup;
-            radioButtonOcean.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonOcean.Font = new Font("Segoe UI", 11F);
             radioButtonOcean.ForeColor = Color.White;
             radioButtonOcean.Location = new Point(356, 26);
             radioButtonOcean.Name = "radioButtonOcean";
@@ -1796,7 +1797,7 @@
             // 
             radioButtonAir.AutoSize = true;
             radioButtonAir.FlatStyle = FlatStyle.Popup;
-            radioButtonAir.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonAir.Font = new Font("Segoe UI", 11F);
             radioButtonAir.ForeColor = Color.White;
             radioButtonAir.Location = new Point(282, 26);
             radioButtonAir.Name = "radioButtonAir";
@@ -1812,7 +1813,7 @@
             // 
             radioButtonFTL.AutoSize = true;
             radioButtonFTL.FlatStyle = FlatStyle.Popup;
-            radioButtonFTL.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            radioButtonFTL.Font = new Font("Segoe UI", 11F);
             radioButtonFTL.ForeColor = Color.White;
             radioButtonFTL.Location = new Point(150, 26);
             radioButtonFTL.Name = "radioButtonFTL";
@@ -1831,7 +1832,7 @@
             groupBoxContainers.Controls.Add(buttonRemoveContainer);
             groupBoxContainers.Controls.Add(buttonAddContainer);
             groupBoxContainers.Controls.Add(listViewContainers);
-            groupBoxContainers.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxContainers.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxContainers.ForeColor = Color.DarkKhaki;
             groupBoxContainers.Location = new Point(739, 173);
             groupBoxContainers.Name = "groupBoxContainers";
@@ -1867,7 +1868,7 @@
             buttonEditContainer.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonEditContainer.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonEditContainer.FlatStyle = FlatStyle.Flat;
-            buttonEditContainer.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonEditContainer.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonEditContainer.ForeColor = Color.White;
             buttonEditContainer.Location = new Point(99, 31);
             buttonEditContainer.Name = "buttonEditContainer";
@@ -1884,7 +1885,7 @@
             buttonRemoveContainer.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonRemoveContainer.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonRemoveContainer.FlatStyle = FlatStyle.Flat;
-            buttonRemoveContainer.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonRemoveContainer.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonRemoveContainer.ForeColor = Color.White;
             buttonRemoveContainer.Location = new Point(182, 31);
             buttonRemoveContainer.Name = "buttonRemoveContainer";
@@ -1901,7 +1902,7 @@
             buttonAddContainer.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonAddContainer.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonAddContainer.FlatStyle = FlatStyle.Flat;
-            buttonAddContainer.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonAddContainer.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonAddContainer.ForeColor = Color.White;
             buttonAddContainer.Location = new Point(16, 31);
             buttonAddContainer.Name = "buttonAddContainer";
@@ -1924,7 +1925,7 @@
             // 
             groupBoxFilters.Controls.Add(buttonReloadDestinationCountryShippers);
             groupBoxFilters.Controls.Add(comboBoxDestinationCountries);
-            groupBoxFilters.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxFilters.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxFilters.ForeColor = Color.Gold;
             groupBoxFilters.Location = new Point(1223, 92);
             groupBoxFilters.Name = "groupBoxFilters";
@@ -1941,7 +1942,7 @@
             buttonReloadDestinationCountryShippers.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonReloadDestinationCountryShippers.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonReloadDestinationCountryShippers.FlatStyle = FlatStyle.Flat;
-            buttonReloadDestinationCountryShippers.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonReloadDestinationCountryShippers.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonReloadDestinationCountryShippers.ForeColor = Color.White;
             buttonReloadDestinationCountryShippers.Location = new Point(278, 26);
             buttonReloadDestinationCountryShippers.Name = "buttonReloadDestinationCountryShippers";
@@ -1963,7 +1964,7 @@
             // labelChangePending
             // 
             labelChangePending.AutoSize = true;
-            labelChangePending.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            labelChangePending.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             labelChangePending.ForeColor = Color.White;
             labelChangePending.Location = new Point(1344, 952);
             labelChangePending.Name = "labelChangePending";
@@ -1987,7 +1988,7 @@
             buttonPrint.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonPrint.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonPrint.FlatStyle = FlatStyle.Flat;
-            buttonPrint.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrint.Font = new Font("Segoe UI", 12F);
             buttonPrint.ForeColor = Color.White;
             buttonPrint.Location = new Point(1189, 1031);
             buttonPrint.Margin = new Padding(3, 4, 3, 4);
@@ -1998,6 +1999,27 @@
             buttonPrint.UseVisualStyleBackColor = false;
             buttonPrint.Click += ButtonPrint_Click;
             // 
+            // buttonEmail
+            // 
+            buttonEmail.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonEmail.BackColor = Color.FromArgb(60, 60, 60);
+            buttonEmail.Cursor = Cursors.Hand;
+            buttonEmail.DialogResult = DialogResult.OK;
+            buttonEmail.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
+            buttonEmail.FlatAppearance.BorderSize = 0;
+            buttonEmail.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
+            buttonEmail.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+            buttonEmail.FlatStyle = FlatStyle.Flat;
+            buttonEmail.Font = new Font("Segoe UI", 12F);
+            buttonEmail.ForeColor = Color.White;
+            buttonEmail.Location = new Point(1040, 1031);
+            buttonEmail.Margin = new Padding(3, 4, 3, 4);
+            buttonEmail.Name = "buttonEmail";
+            buttonEmail.Size = new Size(131, 51);
+            buttonEmail.TabIndex = 79;
+            buttonEmail.Text = "Email";
+            buttonEmail.UseVisualStyleBackColor = false;
+            // 
             // BolDialog
             // 
             AcceptButton = OK_Button;
@@ -2006,6 +2028,7 @@
             BackColor = Color.FromArgb(51, 51, 51);
             CancelButton = Cancel_Button;
             ClientSize = new Size(1634, 1119);
+            Controls.Add(buttonEmail);
             Controls.Add(buttonPrint);
             Controls.Add(labelChangePending);
             Controls.Add(groupBoxFilters);
@@ -2027,12 +2050,12 @@
             Controls.Add(OK_Button);
             Controls.Add(Cancel_Button);
             Controls.Add(panel1);
-            Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            Font = new Font("Segoe UI", 11F);
             ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(3, 4, 3, 4);
             Name = "BolDialog";
-            Text = AppInfo.WindowTitle("BOL Editor");
+            Text = "DesignToolsServer - BOL Editor";
             Load += BolDialog_Load;
             Shown += BolDialog_Shown;
             panel1.ResumeLayout(false);
@@ -2225,5 +2248,6 @@
         private Button buttonPrint;
         private TextBox textBoxBolNumber;
         private Label labelBolNumber;
+        private Button buttonEmail;
     }
 }

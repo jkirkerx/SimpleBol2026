@@ -37,6 +37,7 @@ namespace SimpleBol.WinForms
             this.shipperRepository = shipperRepository;
             this.vendorRepository = vendorRepository;
             this.customerRepository = customerRepository;
+            buttonEmailDialog.Click += ButtonEmailDialog_Click;
         }
 
         #region Form
@@ -277,6 +278,49 @@ namespace SimpleBol.WinForms
                     }
                 }                
             }
+        }
+
+        private async void ButtonEmailDialog_Click(object? sender, EventArgs e)
+        {
+            if (listViewBols.SelectedItems.Count != 1)
+            {
+                MessageBox.Show("You must make a Bill of Lading (BOL) selection in the list view",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (serviceProvider == null || bolRepository == null)
+                return;
+
+            var bolId = listViewBols.SelectedItems[0].SubItems[0].Text;
+            var bol = await bolRepository.GetOneBillOfLaddingAsync(bolId);
+            if (bol == null)
+            {
+                MessageBox.Show("The selected BOL could not be loaded.", Application.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var customerId = bol.CustomerId ?? bol.ShipToId;
+            var customer = bol.Customer ?? bol.ShipToCustomer;
+            if (customer == null && !string.IsNullOrWhiteSpace(customerId))
+                customer = await customerRepository.GetOneCustomerAsync(customerId);
+
+            if (customer == null || string.IsNullOrWhiteSpace(customerId))
+            {
+                MessageBox.Show("The selected BOL does not have a customer to email.",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using var emailBolDialogOwned = serviceProvider.CreateOwnedForm<EmailBolDialog>();
+            var emailBolDialog = emailBolDialogOwned.Form;
+            emailBolDialog.StartPosition = FormStartPosition.CenterParent;
+            emailBolDialog.CustomerId = customerId;
+            emailBolDialog.customer = customer;
+            emailBolDialog.EmailBolId = bolId;
+            emailBolDialog.EmailBol = bol;
+            emailBolDialog.ShowDialog(this);
         }
 
         #endregion

@@ -65,6 +65,7 @@
             buttonEditBol = new Button();
             buttonCreateBol = new Button();
             listViewBols = new ListView();
+            buttonEmailDialog = new Button();
             Panel_Header.SuspendLayout();
             panelPaginate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownShow).BeginInit();
@@ -106,7 +107,7 @@
             // 
             label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             label1.ForeColor = Color.White;
             label1.Location = new Point(6, 11);
             label1.Name = "label1";
@@ -120,7 +121,7 @@
             numericUpDownShow.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             numericUpDownShow.BorderStyle = BorderStyle.None;
             numericUpDownShow.Cursor = Cursors.Hand;
-            numericUpDownShow.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            numericUpDownShow.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             numericUpDownShow.Increment = new decimal(new int[] { 25, 0, 0, 0 });
             numericUpDownShow.Location = new Point(57, 11);
             numericUpDownShow.Name = "numericUpDownShow";
@@ -162,7 +163,7 @@
             // LabelHeader
             // 
             LabelHeader.AutoSize = true;
-            LabelHeader.Font = new Font("Segoe UI", 28F, FontStyle.Regular, GraphicsUnit.Point);
+            LabelHeader.Font = new Font("Segoe UI", 28F);
             LabelHeader.ForeColor = Color.White;
             LabelHeader.Location = new Point(120, 14);
             LabelHeader.Name = "LabelHeader";
@@ -208,7 +209,7 @@
             buttonClearFilters.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonClearFilters.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonClearFilters.FlatStyle = FlatStyle.Flat;
-            buttonClearFilters.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonClearFilters.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonClearFilters.ForeColor = Color.White;
             buttonClearFilters.Location = new Point(16, 700);
             buttonClearFilters.Name = "buttonClearFilters";
@@ -223,7 +224,7 @@
             groupBoxReconcile.Controls.Add(labelReconcileFilterResults);
             groupBoxReconcile.Controls.Add(comboBoxReconcile);
             groupBoxReconcile.Controls.Add(labelReconcile);
-            groupBoxReconcile.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxReconcile.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxReconcile.ForeColor = Color.White;
             groupBoxReconcile.Location = new Point(19, 7);
             groupBoxReconcile.Name = "groupBoxReconcile";
@@ -265,7 +266,7 @@
             groupBoxVendorFilter.Controls.Add(labelVendorFilterResults);
             groupBoxVendorFilter.Controls.Add(comboBoxVendors);
             groupBoxVendorFilter.Controls.Add(label3);
-            groupBoxVendorFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxVendorFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxVendorFilter.ForeColor = Color.Gainsboro;
             groupBoxVendorFilter.Location = new Point(16, 420);
             groupBoxVendorFilter.Name = "groupBoxVendorFilter";
@@ -307,7 +308,7 @@
             groupBoxShipperFilter.Controls.Add(labelShipperFilterResults);
             groupBoxShipperFilter.Controls.Add(comboBoxShippers);
             groupBoxShipperFilter.Controls.Add(label2);
-            groupBoxShipperFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxShipperFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxShipperFilter.ForeColor = Color.Gainsboro;
             groupBoxShipperFilter.Location = new Point(19, 282);
             groupBoxShipperFilter.Name = "groupBoxShipperFilter";
@@ -349,7 +350,7 @@
             groupBoxCustomerFilter.Controls.Add(labelCustomerFilterResults);
             groupBoxCustomerFilter.Controls.Add(comboBoxCustomers);
             groupBoxCustomerFilter.Controls.Add(labelCustomerFilter);
-            groupBoxCustomerFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxCustomerFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxCustomerFilter.ForeColor = Color.Gainsboro;
             groupBoxCustomerFilter.Location = new Point(16, 558);
             groupBoxCustomerFilter.Name = "groupBoxCustomerFilter";
@@ -391,7 +392,7 @@
             groupBoxDateFilter.Controls.Add(labelDateFilterResults);
             groupBoxDateFilter.Controls.Add(labelDateFilter);
             groupBoxDateFilter.Controls.Add(dateTimePickerFilterByShipDate);
-            groupBoxDateFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBoxDateFilter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             groupBoxDateFilter.ForeColor = Color.Gainsboro;
             groupBoxDateFilter.Location = new Point(17, 144);
             groupBoxDateFilter.Name = "groupBoxDateFilter";
@@ -420,7 +421,7 @@
             // 
             // dateTimePickerFilterByShipDate
             // 
-            dateTimePickerFilterByShipDate.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            dateTimePickerFilterByShipDate.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             dateTimePickerFilterByShipDate.Location = new Point(14, 58);
             dateTimePickerFilterByShipDate.Name = "dateTimePickerFilterByShipDate";
             dateTimePickerFilterByShipDate.Size = new Size(220, 23);
@@ -430,6 +431,7 @@
             // panelRight
             // 
             panelRight.BackColor = Color.FromArgb(28, 28, 28);
+            panelRight.Controls.Add(buttonEmailDialog);
             panelRight.Controls.Add(buttonDispute);
             panelRight.Controls.Add(buttonPrintDialog);
             panelRight.Controls.Add(buttonEditBol);
@@ -449,7 +451,7 @@
             buttonDispute.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonDispute.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonDispute.FlatStyle = FlatStyle.Flat;
-            buttonDispute.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonDispute.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonDispute.ForeColor = Color.White;
             buttonDispute.Location = new Point(36, 189);
             buttonDispute.Name = "buttonDispute";
@@ -468,7 +470,7 @@
             buttonPrintDialog.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonPrintDialog.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonPrintDialog.FlatStyle = FlatStyle.Flat;
-            buttonPrintDialog.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonPrintDialog.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonPrintDialog.ForeColor = Color.White;
             buttonPrintDialog.Location = new Point(36, 278);
             buttonPrintDialog.Name = "buttonPrintDialog";
@@ -487,7 +489,7 @@
             buttonEditBol.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonEditBol.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonEditBol.FlatStyle = FlatStyle.Flat;
-            buttonEditBol.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonEditBol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonEditBol.ForeColor = Color.White;
             buttonEditBol.Location = new Point(36, 106);
             buttonEditBol.Name = "buttonEditBol";
@@ -506,7 +508,7 @@
             buttonCreateBol.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
             buttonCreateBol.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
             buttonCreateBol.FlatStyle = FlatStyle.Flat;
-            buttonCreateBol.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonCreateBol.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonCreateBol.ForeColor = Color.White;
             buttonCreateBol.Location = new Point(36, 28);
             buttonCreateBol.Name = "buttonCreateBol";
@@ -519,7 +521,7 @@
             // listViewBols
             // 
             listViewBols.Dock = DockStyle.Fill;
-            listViewBols.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            listViewBols.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             listViewBols.Location = new Point(280, 70);
             listViewBols.Name = "listViewBols";
             listViewBols.Size = new Size(748, 754);
@@ -528,6 +530,24 @@
             listViewBols.ColumnClick += LvBols_ColumnClick;
             listViewBols.SelectedIndexChanged += ListViewBols_SelectedIndexChanged;
             listViewBols.DoubleClick += ListViewBols_DoubleClick;
+            // 
+            // buttonEmailDialog
+            // 
+            buttonEmailDialog.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            buttonEmailDialog.BackColor = Color.FromArgb(60, 60, 60);
+            buttonEmailDialog.Cursor = Cursors.Hand;
+            buttonEmailDialog.FlatAppearance.BorderSize = 0;
+            buttonEmailDialog.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
+            buttonEmailDialog.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+            buttonEmailDialog.FlatStyle = FlatStyle.Flat;
+            buttonEmailDialog.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonEmailDialog.ForeColor = Color.White;
+            buttonEmailDialog.Location = new Point(35, 352);
+            buttonEmailDialog.Name = "buttonEmailDialog";
+            buttonEmailDialog.Size = new Size(130, 51);
+            buttonEmailDialog.TabIndex = 6;
+            buttonEmailDialog.Text = "Email";
+            buttonEmailDialog.UseVisualStyleBackColor = false;
             // 
             // BolsForm
             // 
@@ -606,5 +626,6 @@
         private Label labelReconcile;
         private Button buttonClearFilters;
         private Button buttonDispute;
+        private Button buttonEmailDialog;
     }
 }

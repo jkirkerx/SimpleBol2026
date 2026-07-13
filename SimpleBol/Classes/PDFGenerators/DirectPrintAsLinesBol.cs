@@ -12,6 +12,8 @@ namespace SimpleBol.Classes.PDFGenerators
         public BILLOFLADINGS Bol { get; set; } = null!;
         public string? BolDocumentPath { get; set; }
         public string? DocumentName { get; set; }
+        public string? GeneratedDocumentPath { get; private set; }
+        public bool OpenAfterGeneration { get; set; } = true;
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         public int ItemsPerPage { get; set; }
@@ -94,7 +96,7 @@ namespace SimpleBol.Classes.PDFGenerators
 
                         if (!this._hasMorePages)
                         {
-                            SaveDocument(_document);
+                            result = SaveDocument(_document);
                         }
 
                     } catch (Exception ex)
@@ -1065,7 +1067,7 @@ namespace SimpleBol.Classes.PDFGenerators
 
             // End Of Printing Shipment Details
             // After printing the content for the current page, determine if there are more pages to print
-            if (tempStartIndex == 0 || endIndex < this.TotalItems - 1)
+            if (this.TotalItems > 0 && endIndex < this.TotalItems - 1)
             {
                 this._hasMorePages = true;
                 this.CurrentPage++;         // Move to the next page for the next print event
@@ -1092,22 +1094,25 @@ namespace SimpleBol.Classes.PDFGenerators
         }
 
         /// <summary>
-        /// Writes the document to the system drive in appData
+        /// Writes the document to the requested folder, or the legacy AppData folder.
         /// </summary>
         /// <param name="document"></param>
-        private void SaveDocument(Document document)
+        private bool SaveDocument(Document document)
         {
 
             // Make sure the folder exists first
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Resources.PathBolDocuments;
-            if (!File.Exists(folderPath))
+            string folderPath = !string.IsNullOrWhiteSpace(BolDocumentPath) &&
+                System.IO.Path.IsPathRooted(BolDocumentPath)
+                ? BolDocumentPath
+                : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                    Resources.PathBolDocuments;
+            if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
             // Check if the file exists first and delete it, then generate a new one
-            // The folderPath already hass the trailing slashes
-            string documentPath = folderPath + this.DocumentName + ".pdf";
+            string documentPath = System.IO.Path.Combine(folderPath, this.DocumentName + ".pdf");
             if (File.Exists(documentPath))
             {
                 try
@@ -1134,9 +1139,13 @@ namespace SimpleBol.Classes.PDFGenerators
                 {
                     // Write the Document to the Disk Drive
                     document.Draw(documentPath);
+                    GeneratedDocumentPath = documentPath;
 
                     // Open the Document with the Default PDF Viewer
-                    OpenDocument(documentPath);
+                    if (OpenAfterGeneration)
+                        OpenDocument(documentPath);
+
+                    return true;
 
 
                 }
@@ -1150,6 +1159,8 @@ namespace SimpleBol.Classes.PDFGenerators
 
 
             }
+
+            return false;
 
         }
 
