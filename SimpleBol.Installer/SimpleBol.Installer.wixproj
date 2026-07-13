@@ -8,7 +8,7 @@
     <NotificationsPublishDir>$(MSBuildThisFileDirectory)..\SimpleBol.PrintNotifications\publish\$(Configuration)\win-x64</NotificationsPublishDir>
     <SimpleBolIconPath>$(MSBuildThisFileDirectory)..\SimpleBol\Assets\Artwork\simpleBolIcon512.ico</SimpleBolIconPath>
     <EulaPath>$(MSBuildThisFileDirectory)EULA.rtf</EulaPath>
-    <InstallerOutput>$(MSBuildThisFileDirectory)$(OutputPath)\SimpleBol.msi</InstallerOutput>
+    <InstallerOutput>$(MSBuildThisFileDirectory)$(OutputPath)\SimpleBol2026.msi</InstallerOutput>
     <ProjectGuid>{470FB731-9071-43F8-AB41-CCC1627F9580}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>

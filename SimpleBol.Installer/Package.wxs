@@ -1,6 +1,6 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-  <Package Name="SimpleBol" Manufacturer="jKirkerx" Version="1.0.0.1" UpgradeCode="F4C98ED9-27DF-486F-9882-77768DA37E8F" Scope="perMachine">
-    <MajorUpgrade DowngradeErrorMessage="A newer version of SimpleBol is already installed." />
+  <Package Name="SimpleBol 2026" Manufacturer="jKirkerx" Version="1.0.0.1" UpgradeCode="F4C98ED9-27DF-486F-9882-77768DA37E8F" Scope="perMachine">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of SimpleBol 2026 is already installed." />
     <MediaTemplate EmbedCab="yes" />
     <SetProperty Id="ARPINSTALLLOCATION" Value="[INSTALLFOLDER]" After="CostFinalize" Sequence="both" />
     <Icon Id="SimpleBolIcon" SourceFile="$(var.SimpleBolIconPath)" />
@@ -13,7 +13,7 @@
       <Custom Action="StopPrintNotifications" Before="RemoveFiles" Condition="(REMOVE=&quot;ALL&quot;) OR UPGRADINGPRODUCTCODE" />
       <Custom Action="LaunchPrintNotifications" After="InstallFinalize" Condition="NOT Installed" />
     </InstallExecuteSequence>
-    <Feature Id="Main" Title="SimpleBol" Level="1">
+    <Feature Id="Main" Title="SimpleBol 2026" Level="1">
       <ComponentGroupRef Id="ApplicationFiles" />
       <ComponentGroupRef Id="EmailTemplateFiles" />
       <ComponentGroupRef Id="StartMenuShortcuts" />
@@ -21,14 +21,14 @@
       <ComponentGroupRef Id="StartupShortcuts" />
     </Feature>
     <StandardDirectory Id="ProgramFiles64Folder">
-      <Directory Id="INSTALLFOLDER" Name="SimpleBol">
+      <Directory Id="INSTALLFOLDER" Name="SimpleBol 2026">
         <Directory Id="AssetsFolder" Name="Assets">
           <Directory Id="EmailTemplatesFolder" Name="EmailTemplates" />
         </Directory>
       </Directory>
     </StandardDirectory>
     <StandardDirectory Id="ProgramMenuFolder">
-      <Directory Id="ApplicationProgramsFolder" Name="SimpleBol" />
+      <Directory Id="ApplicationProgramsFolder" Name="SimpleBol 2026" />
     </StandardDirectory>
     <StandardDirectory Id="DesktopFolder" />
     <StandardDirectory Id="StartupFolder" />
@@ -47,22 +47,22 @@
     </ComponentGroup>
     <ComponentGroup Id="StartMenuShortcuts" Directory="ApplicationProgramsFolder">
       <Component Id="StartMenuShortcutComponent">
-        <Shortcut Id="SimpleBolStartMenuShortcut" Name="SimpleBol" Target="[#SimpleBolExeFile]" WorkingDirectory="INSTALLFOLDER" Icon="SimpleBolIcon" />
-        <Shortcut Id="PrintNotificationsStartMenuShortcut" Name="SimpleBol Print Notifications" Target="[#PrintNotificationsExeFile]" WorkingDirectory="INSTALLFOLDER" />
+        <Shortcut Id="SimpleBolStartMenuShortcut" Name="SimpleBol 2026" Target="[#SimpleBolExeFile]" WorkingDirectory="INSTALLFOLDER" Icon="SimpleBolIcon" />
+        <Shortcut Id="PrintNotificationsStartMenuShortcut" Name="SimpleBol 2026 Print Notifications" Target="[#PrintNotificationsExeFile]" WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\jKirkerx\SimpleBol" Name="StartMenuShortcuts" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\jKirkerx\SimpleBol 2026" Name="StartMenuShortcuts" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="DesktopShortcuts" Directory="DesktopFolder">
       <Component Id="DesktopShortcutComponent">
-        <Shortcut Id="SimpleBolDesktopShortcut" Name="SimpleBol" Target="[#SimpleBolExeFile]" WorkingDirectory="INSTALLFOLDER" Icon="SimpleBolIcon" />
-        <RegistryValue Root="HKCU" Key="Software\jKirkerx\SimpleBol" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+        <Shortcut Id="SimpleBolDesktopShortcut" Name="SimpleBol 2026" Target="[#SimpleBolExeFile]" WorkingDirectory="INSTALLFOLDER" Icon="SimpleBolIcon" />
+        <RegistryValue Root="HKCU" Key="Software\jKirkerx\SimpleBol 2026" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="StartupShortcuts" Directory="StartupFolder">
       <Component Id="PrintNotificationsStartupComponent">
-        <Shortcut Id="PrintNotificationsStartupShortcut" Name="SimpleBol Print Notifications" Target="[#PrintNotificationsExeFile]" WorkingDirectory="INSTALLFOLDER" Arguments="--startup" />
-        <RegistryValue Root="HKCU" Key="Software\jKirkerx\SimpleBol" Name="PrintNotificationsStartup" Type="integer" Value="1" KeyPath="yes" />
+        <Shortcut Id="PrintNotificationsStartupShortcut" Name="SimpleBol 2026 Print Notifications" Target="[#PrintNotificationsExeFile]" WorkingDirectory="INSTALLFOLDER" Arguments="--startup" />
+        <RegistryValue Root="HKCU" Key="Software\jKirkerx\SimpleBol 2026" Name="PrintNotificationsStartup" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Package>
