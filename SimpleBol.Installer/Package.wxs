@@ -6,6 +6,7 @@
     <Icon Id="SimpleBolIcon" SourceFile="$(var.SimpleBolIconPath)" />
     <Property Id="ARPPRODUCTICON" Value="SimpleBolIcon" />
     <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.EulaPath)" />
     <CustomAction Id="LaunchPrintNotifications" FileRef="PrintNotificationsExeFile" ExeCommand="--startup" Execute="immediate" Return="asyncNoWait" Impersonate="yes" />
     <CustomAction Id="StopPrintNotifications" Directory="INSTALLFOLDER" ExeCommand="&quot;[SystemFolder]taskkill.exe&quot; /IM SimpleBol.PrintNotifications.exe /T /F" Execute="deferred" Return="ignore" Impersonate="no" />
     <InstallExecuteSequence>

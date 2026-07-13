@@ -10,7 +10,7 @@
     <RootNamespace>SimpleBol.PrintNotifications</RootNamespace>
     <PlatformTarget>x64</PlatformTarget>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-    <ApplicationIcon>..\Assets\Artwork\simpleBolIcon512.ico</ApplicationIcon>
+    <ApplicationIcon>..\SimpleBol\Assets\Artwork\simpleBolIcon512.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

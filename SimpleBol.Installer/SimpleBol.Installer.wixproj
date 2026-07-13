@@ -6,7 +6,8 @@
     <IntermediateOutputPath>obj\$(Configuration)</IntermediateOutputPath>
     <AppPublishDir>$(MSBuildThisFileDirectory)..\publish\SimpleBol\$(Configuration)\win-x64</AppPublishDir>
     <NotificationsPublishDir>$(MSBuildThisFileDirectory)..\SimpleBol.PrintNotifications\publish\$(Configuration)\win-x64</NotificationsPublishDir>
-    <SimpleBolIconPath>$(MSBuildThisFileDirectory)..\Assets\Artwork\simpleBolIcon512.ico</SimpleBolIconPath>
+    <SimpleBolIconPath>$(MSBuildThisFileDirectory)..\SimpleBol\Assets\Artwork\simpleBolIcon512.ico</SimpleBolIconPath>
+    <EulaPath>$(MSBuildThisFileDirectory)EULA.rtf</EulaPath>
     <InstallerOutput>$(MSBuildThisFileDirectory)$(OutputPath)\SimpleBol.msi</InstallerOutput>
     <ProjectGuid>{470FB731-9071-43F8-AB41-CCC1627F9580}</ProjectGuid>
   </PropertyGroup>
@@ -14,12 +15,12 @@
     <WixSource Include="Package.wxs" />
   </ItemGroup>
   <Target Name="BuildInputs">
-    <MSBuild Projects="$(MSBuildThisFileDirectory)..\SimpleBol.csproj" Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;PublishSingleFile=true;IncludeNativeLibrariesForSelfExtract=true;EnableCompressionInSingleFile=true;PublishDir=$(AppPublishDir)\;DebugType=None;DebugSymbols=false" Targets="Restore;Publish" />
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\SimpleBol\SimpleBol.csproj" Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;PublishSingleFile=true;IncludeNativeLibrariesForSelfExtract=true;EnableCompressionInSingleFile=true;PublishDir=$(AppPublishDir)\;DebugType=None;DebugSymbols=false" Targets="Restore;Publish" />
     <MSBuild Projects="$(MSBuildThisFileDirectory)..\SimpleBol.PrintNotifications\SimpleBol.PrintNotifications.csproj" Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;PublishSingleFile=true;IncludeNativeLibrariesForSelfExtract=true;EnableCompressionInSingleFile=true;PublishDir=$(NotificationsPublishDir)\;DebugType=None;DebugSymbols=false" Targets="Restore;Publish" />
   </Target>
   <Target Name="Build" DependsOnTargets="BuildInputs">
     <MakeDir Directories="$(MSBuildThisFileDirectory)$(OutputPath);$(MSBuildThisFileDirectory)$(IntermediateOutputPath)" />
-    <Exec Command="wix build &quot;$(MSBuildThisFileDirectory)Package.wxs&quot; -arch x64 -ext WixToolset.UI.wixext -out &quot;$(InstallerOutput)&quot; -intermediateFolder &quot;$(MSBuildThisFileDirectory)$(IntermediateOutputPath)&quot; -d AppPublishDir=&quot;$(AppPublishDir)&quot; -d NotificationsPublishDir=&quot;$(NotificationsPublishDir)&quot; -d SimpleBolIconPath=&quot;$(SimpleBolIconPath)&quot;" />
+    <Exec Command="wix build &quot;$(MSBuildThisFileDirectory)Package.wxs&quot; -arch x64 -ext WixToolset.UI.wixext -out &quot;$(InstallerOutput)&quot; -intermediateFolder &quot;$(MSBuildThisFileDirectory)$(IntermediateOutputPath)&quot; -d AppPublishDir=&quot;$(AppPublishDir)&quot; -d NotificationsPublishDir=&quot;$(NotificationsPublishDir)&quot; -d SimpleBolIconPath=&quot;$(SimpleBolIconPath)&quot; -d EulaPath=&quot;$(EulaPath)&quot;" />
   </Target>
   <Target Name="Clean">
     <RemoveDir Directories="$(MSBuildThisFileDirectory)$(OutputPath);$(MSBuildThisFileDirectory)$(IntermediateOutputPath)" />
