@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using SimpleBol.Models.MongoDb;
+using SimpleBol.Models.Smtp;
 using SimpleBol.NewtonSoft;
 using SimpleBol.Setup;
 
@@ -23,7 +24,15 @@ namespace SimpleBol.Context.MongoDb
 
             Database = client.GetDatabase(dbConnection.Database);
 
-        }        
+        }
+
+        public MongoDbContext(IMongoClient client, string databaseName)
+        {
+            if (string.IsNullOrWhiteSpace(databaseName))
+                throw new InvalidOperationException("The MongoDB database name is not configured.");
+
+            Database = client.GetDatabase(databaseName);
+        }
 
         // Simple Bol Database Models
         public IMongoCollection<ACCOUNTS> Accounts => Database.GetCollection<ACCOUNTS>(MongoDbCollectionNames.Accounts);
@@ -57,6 +66,8 @@ namespace SimpleBol.Context.MongoDb
         public IMongoCollection<SMTPAPISETTINGS> SmtpCredentials => Database.GetCollection<SMTPAPISETTINGS>(MongoDbCollectionNames.SmtpCredentials);
 
         public IMongoCollection<BILLINGDISPUTES> BillingDisputes => Database.GetCollection<BILLINGDISPUTES>(MongoDbCollectionNames.BillingDisputes);
+
+        public IMongoCollection<EmailTransmissionLog> EmailTransmissionLogs => Database.GetCollection<EmailTransmissionLog>(MongoDbCollectionNames.EmailTransmissionLogs);
 
     }
 }

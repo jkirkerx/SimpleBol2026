@@ -6,6 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SimpleBol.Models.MongoDb
 {
+    [BsonIgnoreExtraElements]
     public class SMTPAPISETTINGS
     {
         public BsonObjectId? Id { get; set; }
@@ -18,6 +19,7 @@ namespace SimpleBol.Models.MongoDb
         public string? SecureToken { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class SendGrid
     {
         public BsonObjectId? Id { get; set; }
@@ -26,6 +28,7 @@ namespace SimpleBol.Models.MongoDb
         public byte[]? Salt { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class Gmail
     {
         public BsonObjectId? Id { get; set; }
@@ -37,6 +40,7 @@ namespace SimpleBol.Models.MongoDb
         public byte[]? Salt { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class  Outlook365 
     {
         public BsonObjectId? Id { get; set; }
@@ -47,6 +51,7 @@ namespace SimpleBol.Models.MongoDb
         public byte[]? Salt { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class CompanyInfo
     {
         public string? CompanyName { get; set; }

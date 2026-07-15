@@ -68,7 +68,7 @@ namespace SimpleBol.Models
         public string? SentFromEmailAddress { get; set; }
         public string? SentFromName {  get; set; }
         public string? UserAccount { get; set; }
-        public bool SaveToSentItems { get; set; }
+        public bool SaveToSentItems { get; set; } = true;
         public byte[]? Salt { get; set; }
     }
 
@@ -89,6 +89,7 @@ namespace SimpleBol.Models
     public class Settings
     {
         public string? Version { get; set; }
+        public string PackageMeasurementCode { get; set; } = "English";
         // DbConnection remains as a compatibility pointer to the active profile.
         public DbConnection? DbConnection { get; set; }
         public List<DbConnection>? DbConnections { get; set; }
@@ -103,6 +104,8 @@ namespace SimpleBol.Models
 
     public class SmtpApiSettings
     {
+        public string? ProfileId { get; set; }
+        public string? ProfileName { get; set; }
         public string? DefaultId { get; set; }
         public string? SecureToken { get; set; }
         public SendGrid? SendGrid { get; set; }
@@ -116,5 +119,11 @@ namespace SimpleBol.Models
         public ProductInfo? ProductInfo { get; set; }
         public Settings? Settings { get; set; }
         public SmtpApiSettings? SmtpApiSettings { get; set; }
+        public List<SmtpApiSettings>? EmailConnections { get; set; }
+        public string? ActiveEmailConnectionId { get; set; }
+
+        // SmtpApiSettings remains available to application code as the active
+        // profile, but profiles are serialized only once in EmailConnections.
+        public bool ShouldSerializeSmtpApiSettings() => false;
     }
 }

@@ -299,7 +299,9 @@
             OK_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             OK_Button.BackColor = Color.FromArgb(60, 60, 60);
             OK_Button.Cursor = Cursors.Hand;
-            OK_Button.DialogResult = DialogResult.OK;
+            // SaveBol is asynchronous. The click handler sets DialogResult only after
+            // the database operation completes successfully.
+            OK_Button.DialogResult = DialogResult.None;
             OK_Button.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
             OK_Button.FlatAppearance.BorderSize = 0;
             OK_Button.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;

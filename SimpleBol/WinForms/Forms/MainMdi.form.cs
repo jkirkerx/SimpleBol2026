@@ -18,6 +18,7 @@ using SimpleBol.Classes.NewtonSoft;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SimpleBol.Setup;
+using SimpleBol.Services.sendEngine;
 
 namespace SimpleBol.WinForms
 {
@@ -27,6 +28,8 @@ namespace SimpleBol.WinForms
         private readonly IMongoDbRepository? mongoDbRepository;
         private readonly ICommonRepository? commonRepository;
         private readonly ISmtpApiSettingsRepository? smtpCredentialsRepository;
+        private readonly IGmailSender gmailSender;
+        private readonly IOutlook365Sender outlook365Sender;
 
         private List<MainMdiForm> mainMdiForms = new();
         private Point newRestoredLocation = Point.Empty;
@@ -35,7 +38,9 @@ namespace SimpleBol.WinForms
             IServiceScopeFactory serviceProvider,
             IMongoDbRepository mongoDbRepository,
             ICommonRepository commonRepository,
-            ISmtpApiSettingsRepository smtpCredentialsRepository)
+            ISmtpApiSettingsRepository smtpCredentialsRepository,
+            IGmailSender gmailSender,
+            IOutlook365Sender outlook365Sender)
         {
             InitializeComponent();
 
@@ -43,7 +48,10 @@ namespace SimpleBol.WinForms
             this.mongoDbRepository = mongoDbRepository;
             this.commonRepository = commonRepository;
             this.smtpCredentialsRepository = smtpCredentialsRepository;
+            this.gmailSender = gmailSender;
+            this.outlook365Sender = outlook365Sender;
             BuildCompanyConnectionMenu();
+            companyConnectionToolStripMenuItem.DropDownOpening += (_, _) => BuildCompanyConnectionMenu();
 
             // Make sure that the folder in AppData Exist first so we can store text files
             var dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Resources.PathMarketPlace;
@@ -384,13 +392,48 @@ namespace SimpleBol.WinForms
             }
 
             companyConnectionToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+            var emailProfiles = rootObject?.EmailConnections ?? new List<SmtpApiSettings>();
+            var activeEmail = emailProfiles.FirstOrDefault(profile =>
+                profile.ProfileId == rootObject?.ActiveEmailConnectionId);
+            companyConnectionToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(
+                $"Email: {activeEmail?.ProfileName ?? "Not configured"} — {activeEmail?.DefaultId ?? "DISABLED"}")
+            { Enabled = false });
+
+            foreach (var emailProfile in emailProfiles)
+            {
+                var emailItem = new ToolStripMenuItem(emailProfile.ProfileName ?? "Unnamed email connection")
+                {
+                    Tag = emailProfile.ProfileId,
+                    Checked = emailProfile.ProfileId == rootObject?.ActiveEmailConnectionId
+                };
+                emailItem.Click += SwitchEmailConnectionProfile_Click;
+                companyConnectionToolStripMenuItem.DropDownItems.Add(emailItem);
+            }
+
+            companyConnectionToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
             var manageItem = new ToolStripMenuItem("Manage Connections…");
             manageItem.Click += MongoDbCredentialsToolStripMenuItem_Click;
             companyConnectionToolStripMenuItem.DropDownItems.Add(manageItem);
 
-            var companySettingsItem = new ToolStripMenuItem("Company Settings…");
+            var companySettingsItem = new ToolStripMenuItem("Manage Email Connections…");
             companySettingsItem.Click += SmtpCredentialsToolStripMenuItem_Click;
             companyConnectionToolStripMenuItem.DropDownItems.Add(companySettingsItem);
+        }
+
+        private async void SwitchEmailConnectionProfile_Click(object? sender, EventArgs e)
+        {
+            if (sender is not ToolStripMenuItem { Tag: string profileId })
+                return;
+
+            var rootObject = AppSettingsJson.GetSettings();
+            var profile = rootObject?.EmailConnections?.FirstOrDefault(item => item.ProfileId == profileId);
+            if (rootObject == null || profile == null || rootObject.ActiveEmailConnectionId == profileId)
+                return;
+
+            rootObject.ActiveEmailConnectionId = profileId;
+            rootObject.SmtpApiSettings = profile;
+            await AppSettingsJson.WriteSettingsAsync(rootObject);
+            BuildCompanyConnectionMenu();
         }
 
         private async void SwitchConnectionProfile_Click(object? sender, EventArgs e)
@@ -441,7 +484,8 @@ namespace SimpleBol.WinForms
         {
             if (serviceProvider != null && commonRepository != null && smtpCredentialsRepository != null)
             {
-                var smtpApiSettingsDialog = new SmtpApiSettingsDialog(serviceProvider, commonRepository, smtpCredentialsRepository)
+                var smtpApiSettingsDialog = new SmtpApiSettingsDialog(serviceProvider, commonRepository,
+                    smtpCredentialsRepository, gmailSender, outlook365Sender)
                 {
                     Dock = DockStyle.None,
                     StartPosition = FormStartPosition.CenterScreen

@@ -338,7 +338,10 @@
             OK_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             OK_Button.BackColor = Color.FromArgb(60, 60, 60);
             OK_Button.Cursor = Cursors.Hand;
-            OK_Button.DialogResult = DialogResult.OK;
+            // The async click handler sets DialogResult only after SavePackage completes.
+            // Setting it here closes the dialog immediately and disposes its DI scope
+            // while the MongoDB work is still in progress.
+            OK_Button.DialogResult = DialogResult.None;
             OK_Button.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
             OK_Button.FlatAppearance.BorderSize = 0;
             OK_Button.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;

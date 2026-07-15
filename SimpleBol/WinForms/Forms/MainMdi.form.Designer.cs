@@ -49,7 +49,6 @@
             smtpCredentialsToolStripMenuItem = new ToolStripMenuItem();
             accountsCredentialsToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
-            exitToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             statusStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -72,6 +71,14 @@
             toolStripStatusLabelConnectivity.Size = new Size(42, 17);
             toolStripStatusLabelConnectivity.Text = "Online";
             // 
+            // companyConnectionToolStripMenuItem
+            // 
+            companyConnectionToolStripMenuItem.BackColor = SystemColors.Control;
+            companyConnectionToolStripMenuItem.ForeColor = SystemColors.ControlText;
+            companyConnectionToolStripMenuItem.Name = "companyConnectionToolStripMenuItem";
+            companyConnectionToolStripMenuItem.Size = new Size(91, 23);
+            companyConnectionToolStripMenuItem.Text = "Connection";
+            // 
             // simpleBolToolStripMenuItem
             // 
             simpleBolToolStripMenuItem.BackColor = SystemColors.Control;
@@ -81,14 +88,6 @@
             simpleBolToolStripMenuItem.Name = "simpleBolToolStripMenuItem";
             simpleBolToolStripMenuItem.Size = new Size(74, 23);
             simpleBolToolStripMenuItem.Text = "Modules";
-            // 
-            // companyConnectionToolStripMenuItem
-            // 
-            companyConnectionToolStripMenuItem.BackColor = SystemColors.Control;
-            companyConnectionToolStripMenuItem.ForeColor = SystemColors.ControlText;
-            companyConnectionToolStripMenuItem.Name = "companyConnectionToolStripMenuItem";
-            companyConnectionToolStripMenuItem.Size = new Size(166, 23);
-            companyConnectionToolStripMenuItem.Text = "Connection";
             // 
             // bolsToolStripMenuItem
             // 
@@ -208,21 +207,12 @@
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
-            // exitToolStripMenuItem
-            // 
-            exitToolStripMenuItem.BackColor = SystemColors.Control;
-            exitToolStripMenuItem.ForeColor = SystemColors.ControlText;
-            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(42, 23);
-            exitToolStripMenuItem.Text = "Exit";
-            exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
-            // 
             // menuStrip1
             // 
             menuStrip1.BackColor = SystemColors.Control;
             menuStrip1.Font = new Font("Segoe UI", 10F);
             menuStrip1.ForeColor = Color.White;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { companyConnectionToolStripMenuItem, simpleBolToolStripMenuItem, utilitiesToolStripMenuItem, aboutToolStripMenuItem, exitToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { companyConnectionToolStripMenuItem, simpleBolToolStripMenuItem, utilitiesToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(914, 27);
@@ -266,7 +256,6 @@
         private ToolStripMenuItem utilitiesToolStripMenuItem;
         private ToolStripMenuItem errorLoggingToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
-        private ToolStripMenuItem exitToolStripMenuItem;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem mongoDbCredentialsToolStripMenuItem;
         private ToolStripMenuItem shippersToolStripMenuItem;

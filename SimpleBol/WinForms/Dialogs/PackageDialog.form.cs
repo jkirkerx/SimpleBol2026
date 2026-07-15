@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using SimpleBol.Classes.Common;
 using SimpleBol.Models.MongoDb;
+using SimpleBol.NewtonSoft;
 using SimpleBol.Repository.MongoDb;
 using System.Data;
 using System.Globalization;
@@ -8,6 +9,9 @@ namespace SimpleBol.WinForms.Dialogs
 {
     public partial class PackageDialog : Form
     {
+        private const string EnglishMeasurementCode = "English";
+        private const string MetricMeasurementCode = "Metric";
+
         public string PackageId { get; set; } = null!;
         public PACKAGES Package { get; set; } = null!;
 
@@ -39,7 +43,7 @@ namespace SimpleBol.WinForms.Dialogs
             LoadCurrencyCodes();
             LoadNmfcCodes();
             LoadClassCodes();
-            SetComboBoxesToWindowsSystemRegion();
+            LoadPackageMeasurementPreference();
 
         }
 
@@ -520,19 +524,20 @@ namespace SimpleBol.WinForms.Dialogs
         #endregion
         #region ComboBoxes
 
-        private void SetComboBoxesToWindowsSystemRegion()
+        private void LoadPackageMeasurementPreference()
         {
+            var savedMeasurementCode = AppSettingsJson.GetSettings()?.Settings?.PackageMeasurementCode;
+            var measurementCode = string.Equals(
+                savedMeasurementCode,
+                MetricMeasurementCode,
+                StringComparison.OrdinalIgnoreCase)
+                ? MetricMeasurementCode
+                : EnglishMeasurementCode;
 
-            string countryName = RegionInfo.CurrentRegion.DisplayName;
-            if (countryName == "United States")
-            {
-                comboBoxRuler.SelectedIndex = comboBoxRuler.FindString("Inch");
+            comboBoxRuler.SelectedItem = measurementCode;
+
+            if (RegionInfo.CurrentRegion.DisplayName == "United States")
                 comboBoxCurrencyCode.SelectedIndex = comboBoxCurrencyCode.FindString("USD");
-            }
-            else
-            {
-                comboBoxRuler.SelectedIndex = comboBoxRuler.FindString("Centimeter");
-            }
 
         }
 
@@ -586,18 +591,20 @@ namespace SimpleBol.WinForms.Dialogs
 
         private void ComboBoxRuler_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            var unitOfMeasurement = comboBoxRuler.SelectedItem;
-            if (unitOfMeasurement != null)
-            {
-                if (unitOfMeasurement.ToString() == "Inch")
-                {
-                    labelUnitOfMeasurement.Text = "LBS";
-                }
-                else
-                {
-                    labelUnitOfMeasurement.Text = "KGs";
-                }
-            }
+            if (comboBoxRuler.SelectedItem is not string measurementCode)
+                return;
+
+            labelUnitOfMeasurement.Text = measurementCode == EnglishMeasurementCode
+                ? "LBS"
+                : "KGs";
+
+            var rootObject = AppSettingsJson.GetSettings();
+            if (rootObject?.Settings == null
+                || rootObject.Settings.PackageMeasurementCode == measurementCode)
+                return;
+
+            rootObject.Settings.PackageMeasurementCode = measurementCode;
+            AppSettingsJson.WriteSettings(rootObject);
         }
 
         private void ComboBoxClassCode_SelectedIndexChanged(object? sender, EventArgs e)

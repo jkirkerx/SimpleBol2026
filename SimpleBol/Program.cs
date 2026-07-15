@@ -50,6 +50,7 @@ namespace SimpleBol
             services.AddTransient<INmfcCodesRepository, NmfcCodesRepository>();
             services.AddTransient<IShipperRepository, ShipperRepository>();
             services.AddTransient<ISmtpApiSettingsRepository, SmtpApiSettingsRepository>();
+            services.AddTransient<IEmailTransmissionLogRepository, EmailTransmissionLogRepository>();
             services.AddTransient<IVendorRepository, VendorRepository>();
 
             services.AddSingleton<ISendGridSender, SendGridSender>();

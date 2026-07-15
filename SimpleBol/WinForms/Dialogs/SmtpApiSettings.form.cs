@@ -10,6 +10,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
 using System.Windows.Forms;
+using SimpleBol.Services.sendEngine;
+using SimpleBol.Classes.Errors;
+using SimpleBol.Context.MongoDb;
+using SimpleBol.Setup;
 
 namespace SimpleBol.WinForms.Dialogs
 {
@@ -23,17 +27,27 @@ namespace SimpleBol.WinForms.Dialogs
         public readonly IServiceScopeFactory serviceProvider;
         public readonly ICommonRepository commonRepository;
         public readonly ISmtpApiSettingsRepository smtpRepository;
+        private readonly IGmailSender gmailSender;
+        private readonly IOutlook365Sender outlook365Sender;
+        private CancellationTokenSource? gmailAuthorizationCancellation;
+        private CancellationTokenSource? outlookAuthorizationCancellation;
+        private bool changingEmailConnection;
 
         public SmtpApiSettingsDialog(
             IServiceScopeFactory serviceProvider,
             ICommonRepository commonRepository,
-            ISmtpApiSettingsRepository smtpRepository)
+            ISmtpApiSettingsRepository smtpRepository,
+            IGmailSender gmailSender,
+            IOutlook365Sender outlook365Sender)
         {
 
             InitializeComponent();
             this.serviceProvider = serviceProvider;
             this.commonRepository = commonRepository;
             this.smtpRepository = smtpRepository;
+            this.gmailSender = gmailSender;
+            this.outlook365Sender = outlook365Sender;
+            ConfigureEmailConnectionControls();
 
         }
 
@@ -52,7 +66,16 @@ namespace SimpleBol.WinForms.Dialogs
             var countries = LoadComboBoxCountriesAsync();
             await Task.WhenAll(countries);
 
+            BindEmailConnections();
             bool appSettingsTask = await LoadAppSettingsRootObject();
+            labelGmailConnectionStatus.Text = await gmailSender.HasAuthorizationAsync(
+                rootObjectGmailSettings())
+                ? CreateGmailConnectionSummary()
+                : "Not connected";
+            labelOutlookConnectionStatus.Text = await outlook365Sender.HasAuthorizationAsync(
+                rootObjectOutlookSettings())
+                ? CreateOutlookConnectionSummary()
+                : "Not connected";
             if (!appSettingsTask)
             {
                 // Ask if the user if they need to load the settings from the cloud storage
@@ -77,7 +100,219 @@ namespace SimpleBol.WinForms.Dialogs
         }
 
         #endregion
+        #region EmailConnections
+
+        private void ConfigureEmailConnectionControls()
+        {
+            comboBoxEmailConnection.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxEmailConnection.SelectedIndexChanged += ComboBoxEmailConnection_SelectedIndexChanged;
+        }
+
+        private void BindEmailConnections()
+        {
+            var rootObject = AppSettingsJson.GetSettings();
+            if (rootObject?.Settings?.DbConnections == null)
+                return;
+
+            changingEmailConnection = true;
+            comboBoxEmailConnection.DataSource = null;
+            comboBoxEmailConnection.DisplayMember = nameof(DbConnection.ProfileName);
+            comboBoxEmailConnection.ValueMember = nameof(DbConnection.ProfileId);
+            comboBoxEmailConnection.DataSource = rootObject.Settings.DbConnections;
+            comboBoxEmailConnection.SelectedValue = rootObject.ActiveEmailConnectionId;
+            changingEmailConnection = false;
+        }
+
+        private async void ComboBoxEmailConnection_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (changingEmailConnection || comboBoxEmailConnection.SelectedValue is not string profileId)
+                return;
+
+            var rootObject = AppSettingsJson.GetSettings();
+            var profile = rootObject?.EmailConnections?.FirstOrDefault(item => item.ProfileId == profileId);
+            if (rootObject == null || profile == null)
+                return;
+
+            rootObject.ActiveEmailConnectionId = profileId;
+            rootObject.SmtpApiSettings = profile;
+            await AppSettingsJson.WriteSettingsAsync(rootObject);
+            ClearEmailConnectionControls();
+            await LoadAppSettingsRootObject();
+            await RefreshAuthorizationStatusAsync();
+        }
+
+        private void ClearEmailConnectionControls()
+        {
+            textBoxSendGridApiKey.Clear();
+            textBoxSendGridSentFrom.Clear();
+            textBoxGmailClientId.Clear();
+            textBoxGmailClientSecret.Clear();
+            textBoxGmailSentFromAddress.Clear();
+            textBoxOutlookClientId.Clear();
+            textBoxOutlookTenantId.Text = "common";
+            textBoxOutlookSentFromAddress.Clear();
+            textBoxCompanyName.Clear();
+            textBoxAddress1.Clear();
+            textBoxAddress2.Clear();
+            textBoxCity.Clear();
+            maskedTextBoxPostalCode.Clear();
+            SelectNoEmailProvider();
+        }
+
+        private Models.Gmail rootObjectGmailSettings() => new()
+        {
+            ClientId = textBoxGmailClientId.Text.Trim(),
+            SentFromEmailAddress = textBoxGmailSentFromAddress.Text.Trim()
+        };
+
+        private Models.Outlook365 rootObjectOutlookSettings() => new()
+        {
+            ClientId = textBoxOutlookClientId.Text.Trim(),
+            TenantId = NormalizeOutlookTenant(),
+            SentFromEmailAddress = textBoxOutlookSentFromAddress.Text.Trim()
+        };
+
+        private async Task RefreshAuthorizationStatusAsync()
+        {
+            labelGmailConnectionStatus.Text = await gmailSender.HasAuthorizationAsync(rootObjectGmailSettings())
+                ? CreateGmailConnectionSummary()
+                : "Not connected";
+            labelOutlookConnectionStatus.Text = await outlook365Sender.HasAuthorizationAsync(rootObjectOutlookSettings())
+                ? CreateOutlookConnectionSummary()
+                : "Not connected";
+        }
+
+        #endregion
         #region Buttons
+
+        private async void ButtonConnectGmail_Click(object? sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxGmailClientId.Text) ||
+                string.IsNullOrWhiteSpace(textBoxGmailClientSecret.Text) ||
+                string.IsNullOrWhiteSpace(textBoxGmailSentFromAddress.Text))
+            {
+                MessageBox.Show("Enter the OAuth Client ID, Client Secret, and Gmail account address first.",
+                    "Connect Gmail", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            buttonConnectGmail.Enabled = false;
+            labelGmailConnectionStatus.Text = "Waiting for Google authorization...";
+            gmailAuthorizationCancellation?.Cancel();
+            gmailAuthorizationCancellation?.Dispose();
+            gmailAuthorizationCancellation = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+            try
+            {
+                await gmailSender.AuthorizeAsync(new Models.Gmail
+                {
+                    ClientId = textBoxGmailClientId.Text.Trim(),
+                    ClientSecret = textBoxGmailClientSecret.Text.Trim(),
+                    SentFromEmailAddress = textBoxGmailSentFromAddress.Text.Trim()
+                }, gmailAuthorizationCancellation.Token);
+                labelGmailConnectionStatus.Text = CreateGmailConnectionSummary();
+                checkBoxGmailDefault.Checked = true;
+                comboBoxDefaultApi.SelectedIndex = 2;
+                MessageBox.Show("Gmail authorization was completed successfully.", "Connect Gmail",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (OperationCanceledException)
+            {
+                labelGmailConnectionStatus.Text = "Not connected";
+                MessageBox.Show("Gmail authorization was canceled or timed out. If Google denied access, " +
+                    "confirm the selected account is listed as an OAuth test user.",
+                    "Connect Gmail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                UseWaitCursor = false;
+                Cursor = Cursors.Default;
+                Cursor.Current = Cursors.Default;
+                labelGmailConnectionStatus.Text = "Not connected";
+                MessageBox.Show("Gmail authorization failed:" + Environment.NewLine + ex.Message,
+                    "Connect Gmail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                UseWaitCursor = false;
+                Cursor = Cursors.Default;
+                Cursor.Current = Cursors.Default;
+                buttonConnectGmail.Enabled = true;
+                gmailAuthorizationCancellation?.Dispose();
+                gmailAuthorizationCancellation = null;
+            }
+        }
+
+        private string CreateGmailConnectionSummary()
+        {
+            var emailAddress = textBoxGmailSentFromAddress.Text.Trim();
+            return $"Connected: {emailAddress}{Environment.NewLine}" +
+                "Permission: Send Gmail only (gmail.send)" + Environment.NewLine +
+                "Refresh token: stored securely for this Windows user";
+        }
+
+        private async void ButtonConnectOutlook_Click(object? sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxOutlookClientId.Text) ||
+                string.IsNullOrWhiteSpace(textBoxOutlookSentFromAddress.Text))
+            {
+                MessageBox.Show("Enter the Application Client ID and Microsoft account email first.",
+                    "Connect Outlook", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            buttonConnectOutlook.Enabled = false;
+            labelOutlookConnectionStatus.Text = "Waiting for Microsoft authorization...";
+            outlookAuthorizationCancellation?.Cancel();
+            outlookAuthorizationCancellation?.Dispose();
+            outlookAuthorizationCancellation = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+            try
+            {
+                await outlook365Sender.AuthorizeAsync(new Models.Outlook365
+                {
+                    ClientId = textBoxOutlookClientId.Text.Trim(),
+                    TenantId = NormalizeOutlookTenant(),
+                    SentFromEmailAddress = textBoxOutlookSentFromAddress.Text.Trim()
+                }, outlookAuthorizationCancellation.Token);
+                labelOutlookConnectionStatus.Text = CreateOutlookConnectionSummary();
+                checkBoxOutlookDefault.Checked = true;
+                comboBoxDefaultApi.SelectedIndex = 3;
+                MessageBox.Show("Microsoft authorization was completed successfully.",
+                    "Connect Outlook", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (OperationCanceledException)
+            {
+                labelOutlookConnectionStatus.Text = "Not connected";
+                MessageBox.Show("Microsoft authorization was canceled or timed out.",
+                    "Connect Outlook", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                labelOutlookConnectionStatus.Text = "Not connected";
+                MessageBox.Show("Microsoft authorization failed:" + Environment.NewLine + ex.Message,
+                    "Connect Outlook", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                UseWaitCursor = false;
+                Cursor = Cursors.Default;
+                Cursor.Current = Cursors.Default;
+                buttonConnectOutlook.Enabled = true;
+                outlookAuthorizationCancellation?.Dispose();
+                outlookAuthorizationCancellation = null;
+            }
+        }
+
+        private string CreateOutlookConnectionSummary()
+        {
+            return $"Connected: {textBoxOutlookSentFromAddress.Text.Trim()}{Environment.NewLine}" +
+                "Permission: Send mail only (Mail.Send)" + Environment.NewLine +
+                "Token: stored securely for this Windows user";
+        }
+
+        private string NormalizeOutlookTenant() =>
+            string.IsNullOrWhiteSpace(textBoxOutlookTenantId.Text)
+                ? "common"
+                : textBoxOutlookTenantId.Text.Trim();
 
         private void Cancel_Button_Click(object sender, EventArgs e)
         {
@@ -88,26 +323,35 @@ namespace SimpleBol.WinForms.Dialogs
         private async void OK_Button_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+            OK_Button.Enabled = false;
+            try
+            {
+                bool savedLocally = await SaveAppSettingsToRootObject();
+                if (!savedLocally)
+                    return;
 
-            bool vFlag1 = await SaveAppSettingsToRootObject();
-            if (checkBoxSaveToCloud.Checked)
-            {
-                bool vFlag2 = await SaveSmtpApiSettingsToCloud();
-                if (vFlag2)
-                {
-                    Cursor = Cursors.Default;
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
+                bool backedUp = await SaveSmtpApiSettingsToCloud();
+                if (!backedUp)
+                    return;
+
+                DialogResult = DialogResult.OK;
+                Close();
             }
-            else
+            catch (Exception ex)
             {
-                if (vFlag1)
-                {
-                    Cursor = Cursors.Default;
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
+                ErrorLogging.NLogException(ex, "Save SMTP API Settings");
+                MessageBox.Show(
+                    "Saving the email settings could not be completed:" +
+                    Environment.NewLine + ex.Message,
+                    "SMTP API Settings",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+                Cursor.Current = Cursors.Default;
+                OK_Button.Enabled = true;
             }
         }
 
@@ -151,22 +395,15 @@ namespace SimpleBol.WinForms.Dialogs
                         }
 
                         textBoxGmailClientId.Text = getSmtp.Gmail.ClientId;
-                        textBoxGmailApiKey.Text = getSmtp.Gmail.ApiKey;
-                        textBoxGmailServiceId.Text = getSmtp.Gmail.ServiceId;
                         textBoxGmailSentFromAddress.Text = getSmtp.Gmail.SentFrom;
                     }
 
                     if (getSmtp.Outlook365 != null)
                     {
-                        // Check if we have both the hashed key and salt, and decrypt the key
-                        if (getSmtp.Outlook365.Salt != null && getSmtp.Outlook365.ClientSecret != null)
-                        {
-                            var apiKey = EncryptDecryptAes.DecryptText(getSmtp.Outlook365.ClientSecret, getSmtp.Outlook365.Salt);
-                            textBoxOutlookClientSecret.Text = apiKey;
-                        }
-
                         textBoxOutlookClientId.Text = getSmtp.Outlook365.ClientId;
-                        textBoxOutlookTenantId.Text = getSmtp.Outlook365.TenantId;
+                        textBoxOutlookTenantId.Text = string.IsNullOrWhiteSpace(getSmtp.Outlook365.TenantId)
+                            ? "common"
+                            : getSmtp.Outlook365.TenantId;
                         textBoxOutlookSentFromAddress.Text = getSmtp.Outlook365.SentFrom;
                     }
 
@@ -282,7 +519,7 @@ namespace SimpleBol.WinForms.Dialogs
             TabPage? selectedTab = tabControlSmtpApiSettings.SelectedTab;
             if (selectedTab == tabPageSendGrid)
             {
-                    // Twillo SendGrid
+                    // Twilio SendGrid
 
                     // SendGrid Api Key
                     if (textBoxSendGridApiKey.Text.Length == 0)
@@ -333,28 +570,6 @@ namespace SimpleBol.WinForms.Dialogs
                         textBoxGmailClientSecret.BackColor = System.Drawing.SystemColors.Window;
                     }
 
-                    // Gmail Service Id
-                    if (textBoxGmailServiceId.Text.Length == 0)
-                    {
-                        vFlag = false;
-                        textBoxGmailServiceId.BackColor = Color.LightSalmon;
-                    }
-                    else
-                    {
-                        textBoxGmailServiceId.BackColor = System.Drawing.SystemColors.Window;
-                    }
-
-                    // Gmail Api Key
-                    if (textBoxGmailApiKey.Text.Length == 0)
-                    {
-                        vFlag = false;
-                        textBoxGmailApiKey.BackColor = Color.LightSalmon;
-                    }
-                    else
-                    {
-                        textBoxGmailApiKey.BackColor = System.Drawing.SystemColors.Window;
-                    }
-
                     // Gmail Sent From Email Address
                     if (textBoxGmailSentFromAddress.Text.Length == 0)
                     {
@@ -380,17 +595,6 @@ namespace SimpleBol.WinForms.Dialogs
                     else
                     {
                         textBoxOutlookClientId.BackColor = System.Drawing.SystemColors.Window;
-                    }
-
-                    // Outlook 365 Client Secret
-                    if (textBoxOutlookClientSecret.Text.Length == 0)
-                    {
-                        vFlag = false;
-                        textBoxOutlookClientSecret.BackColor = Color.LightSalmon;
-                    }
-                    else
-                    {
-                        textBoxOutlookClientSecret.BackColor = System.Drawing.SystemColors.Window;
                     }
 
                     // Outlook 365 Tenant Id
@@ -526,7 +730,7 @@ namespace SimpleBol.WinForms.Dialogs
                 // We are going to save all the data, instead of just the selected Tab Panel
 
 
-                // Twillo SendGrid
+                // Twilio SendGrid
                 if (this.SmtpApiCloudSettings.SendGrid != null)
                 {
                     this.SmtpApiCloudSettings.SendGrid.ApiKey = textBoxSendGridApiKey.Text.Trim();
@@ -544,8 +748,6 @@ namespace SimpleBol.WinForms.Dialogs
                 {
                     this.SmtpApiCloudSettings.Gmail.ClientId = textBoxGmailClientId.Text.Trim();
                     this.SmtpApiCloudSettings.Gmail.ClientSecret = textBoxGmailClientSecret.Text.Trim();
-                    this.SmtpApiCloudSettings.Gmail.ServiceId = textBoxGmailServiceId.Text.Trim();
-                    this.SmtpApiCloudSettings.Gmail.ApiKey = textBoxGmailApiKey.Text.Trim();
                     this.SmtpApiCloudSettings.Gmail.SentFrom = textBoxGmailSentFromAddress.Text.Trim().ToLower();
 
                     // Encrypt this API Key for Storage in the Cloud
@@ -558,14 +760,10 @@ namespace SimpleBol.WinForms.Dialogs
                 if (this.SmtpApiCloudSettings.Outlook365 != null)
                 {
                     this.SmtpApiCloudSettings.Outlook365.ClientId = textBoxOutlookClientId.Text.Trim();
-                    this.SmtpApiCloudSettings.Outlook365.ClientSecret = textBoxOutlookClientSecret.Text.Trim();
-                    this.SmtpApiCloudSettings.Outlook365.TenantId = textBoxOutlookTenantId.Text.Trim();
+                    this.SmtpApiCloudSettings.Outlook365.ClientSecret = null;
+                    this.SmtpApiCloudSettings.Outlook365.TenantId = NormalizeOutlookTenant();
                     this.SmtpApiCloudSettings.Outlook365.SentFrom = textBoxOutlookSentFromAddress.Text.Trim().ToLower();
-
-                    // Encrypt this API Key for Storage in the Cloud
-                    byte[] salt = EncryptDecryptAes.CreateSecret();
-                    this.SmtpApiCloudSettings.Outlook365.Salt = salt;
-                    this.SmtpApiCloudSettings.Outlook365.ClientSecret = EncryptDecryptAes.EncryptText(this.SmtpApiCloudSettings.Outlook365.ClientSecret, salt);
+                    this.SmtpApiCloudSettings.Outlook365.Salt = null;
 
                 }
 
@@ -616,14 +814,17 @@ namespace SimpleBol.WinForms.Dialogs
                 }
 
 
-                if (this.SmtpId != null)
-                {
-                    await smtpRepository.UpdateSmtpCredentialsAsync(this.SmtpApiCloudSettings, this.SmtpId);
-                }
-                else
-                {
-                    await smtpRepository.AddSmtpCredentialsAsync(this.SmtpApiCloudSettings);
-                }
+                var rootObject = AppSettingsJson.GetSettings();
+                var selectedConnectionId = comboBoxEmailConnection.SelectedValue as string;
+                var selectedConnection = rootObject?.Settings?.DbConnections?.FirstOrDefault(connection =>
+                    connection.ProfileId == selectedConnectionId);
+                if (selectedConnection == null || string.IsNullOrWhiteSpace(selectedConnection.Database))
+                    throw new InvalidOperationException("The selected MongoDB connection is not configured.");
+
+                var client = MongoDbConnectionFactory.CreateClient(selectedConnection);
+                var context = new MongoDbContext(client, selectedConnection.Database);
+                var selectedRepository = new SmtpApiSettingsRepository(context);
+                await selectedRepository.AddSmtpCredentialsAsync(this.SmtpApiCloudSettings);
             }
 
             return vFlag;
@@ -643,7 +844,7 @@ namespace SimpleBol.WinForms.Dialogs
                     // The rootObject and Cloud Object are compatible with each other
                     this.SmtpApiRootSettings = rootObject.SmtpApiSettings;
 
-                    // Twillo SendGrid
+                    // Twilio SendGrid
                     if (rootObject.SmtpApiSettings.SendGrid != null)
                     {
                         // Decode the secret value
@@ -673,26 +874,16 @@ namespace SimpleBol.WinForms.Dialogs
                         }
 
                         textBoxGmailClientId.Text = rootObject.SmtpApiSettings.Gmail?.ClientId;
-                        textBoxGmailServiceId.Text = rootObject.SmtpApiSettings.Gmail?.ServiceId;
-                        textBoxGmailApiKey.Text = rootObject.SmtpApiSettings.Gmail?.ApiKey;
                         textBoxGmailSentFromAddress.Text = rootObject.SmtpApiSettings.Gmail?.SentFromEmailAddress;
                     }
 
                     // Outlook 365
                     if (rootObject.SmtpApiSettings.Outlook365 != null)
                     {
-                        // Decode the secret value
-                        if (rootObject.SmtpApiSettings.Outlook365.Salt != null)
-                        {
-                            byte[] salt = rootObject.SmtpApiSettings.Outlook365.Salt;
-                            if (rootObject.SmtpApiSettings.Outlook365?.ClientSecret != null)
-                            {
-                                textBoxOutlookClientSecret.Text = EncryptDecryptAes.DecryptText(rootObject.SmtpApiSettings.Outlook365.ClientSecret, salt);
-                            }
-                        }
-
                         textBoxOutlookClientId.Text = rootObject.SmtpApiSettings.Outlook365?.ClientId;
-                        textBoxOutlookTenantId.Text = rootObject.SmtpApiSettings.Outlook365?.TenantId;
+                        textBoxOutlookTenantId.Text = string.IsNullOrWhiteSpace(rootObject.SmtpApiSettings.Outlook365?.TenantId)
+                            ? "common"
+                            : rootObject.SmtpApiSettings.Outlook365.TenantId;
                         textBoxOutlookSentFromAddress.Text = rootObject.SmtpApiSettings.Outlook365?.SentFromEmailAddress;
                     }
 
@@ -825,8 +1016,7 @@ namespace SimpleBol.WinForms.Dialogs
 
                     if (rootObject.SmtpApiSettings != null)
                     {
-
-                        // Twillo SendGrid
+                        // Twilio SendGrid
                         if (rootObject.SmtpApiSettings.SendGrid != null)
                         {
                             byte[] salt = EncryptDecryptAes.CreateSecret();
@@ -840,9 +1030,7 @@ namespace SimpleBol.WinForms.Dialogs
                         {
                             byte[] salt = EncryptDecryptAes.CreateSecret();
                             rootObject.SmtpApiSettings.Gmail.Salt = salt;
-                            rootObject.SmtpApiSettings.Gmail.ApiKey = textBoxGmailApiKey.Text.Trim();
                             rootObject.SmtpApiSettings.Gmail.ClientId = textBoxGmailClientId.Text.Trim();
-                            rootObject.SmtpApiSettings.Gmail.ServiceId = textBoxGmailServiceId.Text.Trim();
                             rootObject.SmtpApiSettings.Gmail.ClientSecret = EncryptDecryptAes.EncryptText(textBoxGmailClientSecret.Text.Trim(), salt);
                             rootObject.SmtpApiSettings.Gmail.SentFromEmailAddress = textBoxGmailSentFromAddress.Text.Trim().ToLower();
                         }
@@ -850,11 +1038,10 @@ namespace SimpleBol.WinForms.Dialogs
                         // Microsoft Outlook 365
                         if (rootObject.SmtpApiSettings.Outlook365 != null)
                         {
-                            byte[] salt = EncryptDecryptAes.CreateSecret();
-                            rootObject.SmtpApiSettings.Outlook365.Salt = salt;
+                            rootObject.SmtpApiSettings.Outlook365.Salt = null;
                             rootObject.SmtpApiSettings.Outlook365.ClientId = textBoxOutlookClientId.Text.Trim();
-                            rootObject.SmtpApiSettings.Outlook365.ClientSecret = EncryptDecryptAes.EncryptText(textBoxOutlookClientSecret.Text.Trim(), salt);
-                            rootObject.SmtpApiSettings.Outlook365.TenantId = textBoxOutlookTenantId.Text.Trim();
+                            rootObject.SmtpApiSettings.Outlook365.ClientSecret = null;
+                            rootObject.SmtpApiSettings.Outlook365.TenantId = NormalizeOutlookTenant();
                             rootObject.SmtpApiSettings.Outlook365.SentFromEmailAddress = textBoxOutlookSentFromAddress.Text.Trim().ToLower();
                         }
 
@@ -1150,7 +1337,7 @@ namespace SimpleBol.WinForms.Dialogs
 
                 checkBoxGmailDefault.Checked = false;
                 checkBoxOutlookDefault.Checked = false;
-                comboBoxDefaultApi.SelectedIndex = 0;
+                comboBoxDefaultApi.SelectedIndex = 1;
 
                 if (this.SmtpApiCloudSettings != null)
                 {
@@ -1172,7 +1359,7 @@ namespace SimpleBol.WinForms.Dialogs
 
                 checkBoxSendGridDefault.Checked = false;
                 checkBoxOutlookDefault.Checked = false;
-                comboBoxDefaultApi.SelectedIndex = 1;
+                comboBoxDefaultApi.SelectedIndex = 2;
 
                 if (this.SmtpApiCloudSettings != null)
                 {
@@ -1194,7 +1381,7 @@ namespace SimpleBol.WinForms.Dialogs
 
                 checkBoxSendGridDefault.Checked = false;
                 checkBoxGmailDefault.Checked = false;
-                comboBoxDefaultApi.SelectedIndex = 2;
+                comboBoxDefaultApi.SelectedIndex = 3;
 
                 if (this.SmtpApiCloudSettings != null)
                 {

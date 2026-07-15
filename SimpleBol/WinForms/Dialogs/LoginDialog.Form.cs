@@ -51,6 +51,7 @@ namespace SimpleBol.WinForms.Dialogs
                     MessageBox.Show("The user name or password is incorrect.", "Sign In",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     textBoxPassword.Focus();
+                    textBoxPassword.RightToLeft = RightToLeft.No;
                     return;
                 }
 

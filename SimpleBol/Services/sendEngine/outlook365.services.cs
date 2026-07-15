@@ -1,185 +1,290 @@
-﻿using Azure.Core;
+using Azure.Core;
+using Azure.Identity;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using Azure.Identity;
-using SimpleBol.Models.Smtp;
 using NLog;
+using SimpleBol.Models.Smtp;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 
-namespace SimpleBol.Services.sendEngine
+namespace SimpleBol.Services.sendEngine;
+
+public interface IOutlook365Sender
 {
-    public interface IOutlook365Sender
+    Task<EmailResponse?> SendEmailAsync(
+        SimpleBol.Models.Outlook365 settings,
+        SimpleBol.Models.Smtp.MailMessage mailMessage,
+        CancellationToken cancellationToken = default);
+
+    Task AuthorizeAsync(
+        SimpleBol.Models.Outlook365 settings,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> HasAuthorizationAsync(SimpleBol.Models.Outlook365 settings);
+}
+
+public sealed class Outlook365Sender : IOutlook365Sender
+{
+    private const string LegacyAuthorizationMarkerKey = "SimpleBol.Outlook.Authorization";
+    private static readonly string[] GraphScopes = ["Mail.Send"];
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+    public async Task AuthorizeAsync(
+        SimpleBol.Models.Outlook365 settings,
+        CancellationToken cancellationToken = default)
     {
-        Task<SmtpResponse?> SendEmailAsync(
-            SimpleBol.Models.Outlook365 settings,
-            SimpleBol.Models.Smtp.MailMessage mailMessage,
-            CancellationToken cancellationToken = default);
+        var cacheName = CreateFreshTokenCacheName(settings.SentFromEmailAddress);
+        var credential = CreateCredential(settings, null, cacheName);
+        var authenticationRecord = await credential.AuthenticateAsync(
+            CreateGraphTokenRequestContext(), cancellationToken);
+        await SaveAuthorizationRecordAsync(
+            settings, authenticationRecord, cacheName, cancellationToken);
     }
 
-    public class Outlook365Sender : IOutlook365Sender
+    public async Task<bool> HasAuthorizationAsync(SimpleBol.Models.Outlook365 settings)
     {
-        // Initialize the logger
-        private static readonly NLog.Logger logger = LogManager.GetCurrentClassLogger();
+        var marker = await new ProtectedDataStore()
+            .GetAsync<OutlookAuthorizationMarker>(CreateAuthorizationMarkerKey(settings));
+        return marker != null &&
+            !string.IsNullOrWhiteSpace(marker.ClientId) &&
+            !string.IsNullOrWhiteSpace(marker.SerializedAuthenticationRecord);
+    }
 
-        public async Task<SmtpResponse?> SendEmailAsync(
-            SimpleBol.Models.Outlook365 settings,
-            SimpleBol.Models.Smtp.MailMessage mailMessage,
-            CancellationToken cancellationToken = default)
+    public async Task<EmailResponse?> SendEmailAsync(
+        SimpleBol.Models.Outlook365 settings,
+        SimpleBol.Models.Smtp.MailMessage mailMessage,
+        CancellationToken cancellationToken = default)
+    {
+        try
         {
-            SmtpResponse? smtpResponse = null;
-
-            if (settings.ClientId != null && settings.ClientSecret != null && settings.TenantId != null)
+            var credential = await GetCredentialAsync(settings, cancellationToken);
+            using var graphClient = new GraphServiceClient(credential, GraphScopes);
+            var message = CreateMessage(mailMessage);
+            var body = new Microsoft.Graph.Me.SendMail.SendMailPostRequestBody
             {
-                ClientSecretCredential credential = new ClientSecretCredential(settings.TenantId, settings.ClientId, settings.ClientSecret);
-                GraphServiceClient graphClient = new GraphServiceClient(credential);
+                Message = message,
+                // BOL transmissions are business records and should remain visible
+                // in the authenticated Outlook mailbox after Graph accepts them.
+                SaveToSentItems = true
+            };
 
-                List<Recipient> toRecipients = new List<Recipient>();
-                if (mailMessage.SendTo != null && mailMessage.SendTo.Any())
-                {
-                    foreach (var recipient in mailMessage.SendTo)
-                    {
-                        var recipientObject = new Recipient
-                        {
-                            EmailAddress = new Microsoft.Graph.Models.EmailAddress
-                            {
-                                Address = recipient.Email,
-                                Name = recipient.Name,
-                            }
-                        };
-                        toRecipients.Add(recipientObject);
-                    }
-                }
+            await graphClient.Me.SendMail.PostAsync(body, cancellationToken: cancellationToken);
 
-                List<Recipient> ccRecipients = new List<Recipient>();
-                if (mailMessage.CcTo != null && mailMessage.CcTo.Any())
-                {
-                    foreach (var recipient in mailMessage.CcTo)
-                    {
-                        var recipientObject = new Recipient
-                        {
-                            EmailAddress = new Microsoft.Graph.Models.EmailAddress
-                            {
-                                Address = recipient.Email,
-                                Name = recipient.Name,
-                            }
-                        };
-                        ccRecipients.Add(recipientObject);
-                    }
-                }
+            var responseBody = new StringContent(
+                "Microsoft Graph accepted the message and saved it to Sent Items.");
+            return new EmailResponse(
+                true,
+                HttpStatusCode.Accepted,
+                responseBody,
+                null,
+                SmtpError.None,
+                null);
+        }
+        catch (Microsoft.Graph.Models.ODataErrors.ODataError ex)
+        {
+            Logger.Error(ex, "Microsoft Graph rejected an Outlook email message.");
+            return new EmailResponse(
+                false,
+                HttpStatusCode.BadRequest,
+                null,
+                null,
+                SmtpError.Smtp_Code,
+                ex.Error?.Message ?? ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "An error occurred while sending an Outlook email message.");
+            return new EmailResponse(
+                false,
+                HttpStatusCode.InternalServerError,
+                null,
+                null,
+                SmtpError.Program_Code,
+                ex.Message);
+        }
+    }
 
-                List<Recipient> bccRecipients = new List<Recipient>();
-                if (mailMessage.BccTo != null && mailMessage.BccTo.Any())
-                {
-                    foreach (var recipient in mailMessage.BccTo)
-                    {
-                        var recipientObject = new Recipient
-                        {
-                            EmailAddress = new Microsoft.Graph.Models.EmailAddress
-                            {
-                                Address = recipient.Email,
-                                Name = recipient.Name,
-                            }
-                        };
-                        bccRecipients.Add(recipientObject);
-                    }
-                }
+    private static async Task<InteractiveBrowserCredential> GetCredentialAsync(
+        SimpleBol.Models.Outlook365 settings,
+        CancellationToken cancellationToken)
+    {
+        var dataStore = new ProtectedDataStore();
+        var marker = await dataStore
+            .GetAsync<OutlookAuthorizationMarker>(CreateAuthorizationMarkerKey(settings));
+        marker ??= await dataStore.GetAsync<OutlookAuthorizationMarker>(LegacyAuthorizationMarkerKey);
+        AuthenticationRecord? authenticationRecord = null;
 
-                Recipient? senderEmail = null;
-                if (mailMessage.SendFrom != null)
-                {
-                    senderEmail = new Recipient
-                    {
-                        EmailAddress = new Microsoft.Graph.Models.EmailAddress
-                        {
-                            Address = mailMessage.SendFrom.Email,
-                            Name = mailMessage.SendFrom.Name,
-                        }
-                    };
-                }
-
-                ItemBody? htmlContent = null;
-                if (!string.IsNullOrEmpty(mailMessage.HtmlContent))
-                {
-                    htmlContent = new ItemBody
-                    {
-                        ContentType = BodyType.Html,
-                        Content = mailMessage.HtmlContent
-                    };
-                    // Include plain text content as an additional property
-                    htmlContent.AdditionalData["PlainTextContent"] = mailMessage.PlainTextContent;
-                }
-
-                List<Microsoft.Graph.Models.Attachment> attachments = new List<Microsoft.Graph.Models.Attachment>();
-                if (mailMessage.Attachments != null && mailMessage.Attachments.Any())
-                {
-                    foreach (var attachment in mailMessage.Attachments)
-                    {
-                        byte[]? contentBytes = null;
-                        if (!string.IsNullOrEmpty(attachment.FilePath) && File.Exists(attachment.FilePath))
-                        {
-                            contentBytes = File.ReadAllBytes(attachment.FilePath);
-                        }
-                        var fileAttachment = new FileAttachment
-                        {
-                            Name = attachment.FileName,
-                            ContentBytes = contentBytes,
-                        };
-                        attachments.Add(fileAttachment);
-                    }
-                }
-
-                Microsoft.Graph.Models.Message message = new Microsoft.Graph.Models.Message
-                {
-                    Sender = senderEmail,
-                    ToRecipients = toRecipients,
-                    CcRecipients = ccRecipients,
-                    BccRecipients = bccRecipients,
-                    Subject = mailMessage.Subject,
-                    Body = htmlContent,
-                    Attachments = attachments
-                };
-
-                Microsoft.Graph.Users.Item.SendMail.SendMailPostRequestBody body = new Microsoft.Graph.Users.Item.SendMail.SendMailPostRequestBody
-                {
-                    Message = message,
-                    SaveToSentItems = settings.SaveToSentItems
-                };
-
-                try
-                {
-                    await graphClient.Users[settings.UserAccount].SendMail.PostAsync(body, null, cancellationToken);                    
-                    Console.WriteLine("Email sent successfully using Outlook365!");
-
-                    // Manufacture synthetic response
-                    System.Net.Http.HttpContent responseBody = new System.Net.Http.StringContent("Email sent successfully!");
-                    HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-                    responseMessage.Content = responseBody;
-                    smtpResponse = new(true, System.Net.HttpStatusCode.OK, responseBody, responseMessage.Headers, SmtpError.None, "");
-
-                }
-                catch (Microsoft.Graph.ServiceException ex)
-                {                    
-                    Console.WriteLine($"Error sending email using Outlook365: {ex.Message}");
-                    Console.WriteLine($"Status code: {ex.ResponseStatusCode}");
-
-                    // Handle error and create SmtpResponse accordingly
-                    smtpResponse = new SmtpResponse(false, System.Net.HttpStatusCode.BadRequest, null, null, SmtpError.None, ex.Message);
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error sending email using Outlook365: {ex.Message}");
-
-                    // Handle error and create SmtpResponse accordingly
-                    smtpResponse = new SmtpResponse(false, System.Net.HttpStatusCode.InternalServerError, null, null, SmtpError.Program_Code, ex.Message);
-                }
+        if (marker?.ClientId == settings.ClientId &&
+            !string.IsNullOrWhiteSpace(marker.SerializedAuthenticationRecord))
+        {
+            try
+            {
+                var bytes = Convert.FromBase64String(marker.SerializedAuthenticationRecord);
+                using var stream = new MemoryStream(bytes);
+                authenticationRecord = await AuthenticationRecord.DeserializeAsync(
+                    stream, cancellationToken);
+                ValidateSavedAuthorization(settings, marker);
             }
-            
-
-            return smtpResponse;
+            catch (Exception ex) when (ex is FormatException or InvalidDataException)
+            {
+                Logger.Warn(ex, "The saved Outlook authentication record could not be restored.");
+            }
         }
 
+        if (authenticationRecord != null)
+            return CreateCredential(
+                settings,
+                authenticationRecord,
+                marker?.TokenCacheName ?? CreateLegacyTokenCacheName(settings.SentFromEmailAddress));
 
+        // Existing installations have a token cache but no serialized account record.
+        // Authenticate once more, save the account record, then future sends are silent.
+        var cacheName = CreateFreshTokenCacheName(settings.SentFromEmailAddress);
+        var credential = CreateCredential(settings, null, cacheName);
+        authenticationRecord = await credential.AuthenticateAsync(
+            CreateGraphTokenRequestContext(), cancellationToken);
+        await SaveAuthorizationRecordAsync(
+            settings, authenticationRecord, cacheName, cancellationToken);
+        return credential;
+    }
+
+    private static InteractiveBrowserCredential CreateCredential(
+        SimpleBol.Models.Outlook365 settings,
+        AuthenticationRecord? authenticationRecord,
+        string tokenCacheName)
+    {
+        if (string.IsNullOrWhiteSpace(settings.ClientId))
+            throw new InvalidOperationException("Microsoft OAuth Application Client ID is required.");
+
+        return new InteractiveBrowserCredential(new InteractiveBrowserCredentialOptions
+        {
+            ClientId = settings.ClientId.Trim(),
+            TenantId = NormalizeTenant(settings.TenantId),
+            RedirectUri = new Uri("http://localhost"),
+            AuthenticationRecord = authenticationRecord,
+            TokenCachePersistenceOptions = new TokenCachePersistenceOptions
+            {
+                Name = tokenCacheName
+            }
+        });
+    }
+
+    private static async Task SaveAuthorizationRecordAsync(
+        SimpleBol.Models.Outlook365 settings,
+        AuthenticationRecord authenticationRecord,
+        string tokenCacheName,
+        CancellationToken cancellationToken)
+    {
+        using var stream = new MemoryStream();
+        await authenticationRecord.SerializeAsync(stream, cancellationToken);
+        await new ProtectedDataStore().StoreAsync(
+            CreateAuthorizationMarkerKey(settings),
+            new OutlookAuthorizationMarker
+            {
+                ClientId = settings.ClientId,
+                TenantId = NormalizeTenant(settings.TenantId),
+                AccountEmail = settings.SentFromEmailAddress?.Trim(),
+                TokenCacheName = tokenCacheName,
+                SerializedAuthenticationRecord = Convert.ToBase64String(stream.ToArray()),
+                AuthorizedUtc = DateTime.UtcNow
+            });
+    }
+
+    private static string NormalizeTenant(string? tenantId) =>
+        string.IsNullOrWhiteSpace(tenantId) ? "common" : tenantId.Trim();
+
+    // Microsoft Graph requests Continuous Access Evaluation (CAE) tokens. Azure
+    // Identity persists CAE and non-CAE tokens in separate cache files, so the
+    // explicit Connect flow must populate the same CAE cache used by SendMail.
+    private static TokenRequestContext CreateGraphTokenRequestContext() =>
+        new(GraphScopes, isCaeEnabled: true);
+
+    private static string CreateFreshTokenCacheName(string? accountEmail) =>
+        $"{CreateLegacyTokenCacheName(accountEmail)}.{Guid.NewGuid():N}";
+
+    private static string CreateLegacyTokenCacheName(string? accountEmail)
+    {
+        var normalizedEmail = accountEmail?.Trim().ToLowerInvariant() ?? "unknown";
+        var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(normalizedEmail)));
+        return $"SimpleBol.Outlook.{hash[..16]}";
+    }
+
+    private static string CreateAuthorizationMarkerKey(SimpleBol.Models.Outlook365 settings) =>
+        $"SimpleBol.Outlook.Authorization.{settings.SentFromEmailAddress?.Trim().ToLowerInvariant() ?? "unknown"}";
+
+    private static void ValidateSavedAuthorization(
+        SimpleBol.Models.Outlook365 settings,
+        OutlookAuthorizationMarker marker)
+    {
+        if (string.IsNullOrWhiteSpace(settings.SentFromEmailAddress) ||
+            string.IsNullOrWhiteSpace(marker.AccountEmail))
+            return;
+
+        if (!string.Equals(settings.SentFromEmailAddress.Trim(),
+                marker.AccountEmail.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"Microsoft authorized '{marker.AccountEmail}', but Outlook settings " +
+                $"are configured for '{settings.SentFromEmailAddress}'. Connect Outlook again " +
+                "and sign in with the configured mailbox.");
+        }
+    }
+
+    private static Microsoft.Graph.Models.Message CreateMessage(
+        SimpleBol.Models.Smtp.MailMessage mailMessage)
+    {
+        var content = !string.IsNullOrWhiteSpace(mailMessage.HtmlContent)
+            ? mailMessage.HtmlContent
+            : mailMessage.PlainTextContent;
+        var contentType = !string.IsNullOrWhiteSpace(mailMessage.HtmlContent)
+            ? BodyType.Html
+            : BodyType.Text;
+
+        return new Microsoft.Graph.Models.Message
+        {
+            ToRecipients = CreateRecipients(mailMessage.SendTo),
+            CcRecipients = CreateRecipients(mailMessage.CcTo),
+            BccRecipients = CreateRecipients(mailMessage.BccTo),
+            Subject = mailMessage.Subject,
+            Body = new ItemBody { ContentType = contentType, Content = content },
+            Attachments = CreateAttachments(mailMessage.Attachments)
+        };
+    }
+
+    private static List<Recipient> CreateRecipients(IEnumerable<SimpleBol.Models.Smtp.EmailAddress>? addresses) =>
+        addresses?
+            .Where(address => !string.IsNullOrWhiteSpace(address.Email))
+            .Select(address => new Recipient
+            {
+                EmailAddress = new Microsoft.Graph.Models.EmailAddress
+                {
+                    Address = address.Email,
+                    Name = address.Name
+                }
+            }).ToList() ?? [];
+
+    private static List<Microsoft.Graph.Models.Attachment> CreateAttachments(
+        IEnumerable<SimpleBol.Models.Smtp.Attachment>? attachments) =>
+        attachments?
+            .Where(attachment => !string.IsNullOrWhiteSpace(attachment.FilePath) &&
+                File.Exists(attachment.FilePath))
+            .Select(attachment => (Microsoft.Graph.Models.Attachment)new FileAttachment
+            {
+                Name = attachment.FileName ?? Path.GetFileName(attachment.FilePath),
+                ContentType = "application/pdf",
+                ContentBytes = File.ReadAllBytes(attachment.FilePath!)
+            }).ToList() ?? [];
+
+    private sealed class OutlookAuthorizationMarker
+    {
+        public string? ClientId { get; set; }
+        public string? TenantId { get; set; }
+        public string? AccountEmail { get; set; }
+        public string? TokenCacheName { get; set; }
+        public string? SerializedAuthenticationRecord { get; set; }
+        public DateTime AuthorizedUtc { get; set; }
     }
 }

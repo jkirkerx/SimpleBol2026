@@ -40,7 +40,8 @@ internal static class MongoDbInitializer
             [MongoDbCollectionNames.ShippingLocations] = "LocationId",
             [MongoDbCollectionNames.BillToAccounts] = "BillToAccountId",
             [MongoDbCollectionNames.SmtpCredentials] = "SmtpId",
-            [MongoDbCollectionNames.BillingDisputes] = "BillingDisputeId"
+            [MongoDbCollectionNames.BillingDisputes] = "BillingDisputeId",
+            [MongoDbCollectionNames.EmailTransmissionLogs] = "TransmissionId"
         };
 
         foreach (var (collectionName, fieldName) in identifiers)
@@ -128,6 +129,24 @@ internal static class MongoDbInitializer
                     .Ascending("CountryId")
                     .Ascending("ShortName"),
                 new CreateIndexOptions { Name = "ix_CountryId_ShortName" }));
+        }
+
+        var emailLogs = database.GetCollection<BsonDocument>(
+            MongoDbCollectionNames.EmailTransmissionLogs);
+        if (!await HasIndexOnFieldsAsync(emailLogs, "RelatedDocumentId", "CreatedUtc"))
+        {
+            await emailLogs.Indexes.CreateOneAsync(new CreateIndexModel<BsonDocument>(
+                Builders<BsonDocument>.IndexKeys
+                    .Ascending("RelatedDocumentId")
+                    .Descending("CreatedUtc"),
+                new CreateIndexOptions { Name = "ix_EmailLog_Document_CreatedUtc" }));
+        }
+
+        if (!await HasIndexOnFieldsAsync(emailLogs, "CreatedUtc"))
+        {
+            await emailLogs.Indexes.CreateOneAsync(new CreateIndexModel<BsonDocument>(
+                Builders<BsonDocument>.IndexKeys.Descending("CreatedUtc"),
+                new CreateIndexOptions { Name = "ix_EmailLog_CreatedUtc" }));
         }
     }
 

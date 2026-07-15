@@ -9,6 +9,9 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Util.Store;
 using static Google.Apis.Gmail.v1.UsersResource.DraftsResource;
 using SimpleBol.Models.Smtp;
 using MongoDB.Bson;
@@ -23,10 +26,15 @@ namespace SimpleBol.Services.sendEngine
 
     public interface IGmailSender
     {
-        Task<SmtpResponse?> SendEmailMessageAsync(
+        Task<EmailResponse?> SendEmailMessageAsync(
             SimpleBol.Models.Gmail settings,
             SimpleBol.Models.Smtp.MailMessage mailMessage,
             CancellationToken cancellationToken = default);
+
+        Task AuthorizeAsync(SimpleBol.Models.Gmail settings,
+            CancellationToken cancellationToken = default);
+
+        Task<bool> HasAuthorizationAsync(SimpleBol.Models.Gmail settings);
         
     }    
 
@@ -35,19 +43,19 @@ namespace SimpleBol.Services.sendEngine
         // Initialize the logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public async Task<SmtpResponse?> SendEmailMessageAsync(
+        public async Task<EmailResponse?> SendEmailMessageAsync(
             SimpleBol.Models.Gmail settings,
             SimpleBol.Models.Smtp.MailMessage mailMessage,
             CancellationToken cancellationToken = default)
         {
-            SmtpResponse? smtpResponse = null;
+            EmailResponse? smtpResponse = null;
             Google.Apis.Gmail.v1.Data.Message? response = null;
 
             {
                 try
                 {
                     // Initialize the Gmail service
-                    var service = await GetGmailService(settings);
+                    var service = await GetGmailService(settings, cancellationToken);
 
                     // Create a new email message
                     var message = CreateMessage(settings, mailMessage);
@@ -81,32 +89,59 @@ namespace SimpleBol.Services.sendEngine
             return smtpResponse;
         }
 
-        private async Task<GmailService> GetGmailService(SimpleBol.Models.Gmail settings)
+        public async Task AuthorizeAsync(SimpleBol.Models.Gmail settings,
+            CancellationToken cancellationToken = default)
         {
-            var service = new GmailService();
+            ValidateOAuthSettings(settings);
+            await new ProtectedDataStore().DeleteAsync<TokenResponse>(CreateAuthorizationKey(settings));
+            _ = await GetCredentialAsync(settings, cancellationToken);
+        }
 
-            if (!string.IsNullOrWhiteSpace(settings.ApiKey))
+        public async Task<bool> HasAuthorizationAsync(SimpleBol.Models.Gmail settings)
+        {
+            var token = await new ProtectedDataStore()
+                .GetAsync<TokenResponse>(CreateAuthorizationKey(settings));
+            return !string.IsNullOrWhiteSpace(token?.RefreshToken);
+        }
+
+        private async Task<GmailService> GetGmailService(SimpleBol.Models.Gmail settings,
+            CancellationToken cancellationToken)
+        {
+            var credential = await GetCredentialAsync(settings, cancellationToken);
+            return new GmailService(new BaseClientService.Initializer
             {
-                // Load the credentials from a JSON string
-                GoogleCredential credential = await Task.Run(() =>
-                {
-                    using var credentialStream = new MemoryStream(Encoding.UTF8.GetBytes(settings.ApiKey));
-                    return CredentialFactory
-                        .FromStream<ServiceAccountCredential>(credentialStream)
-                        .ToGoogleCredential()
-                        .CreateScoped(GmailService.Scope.MailGoogleCom)
-                        .CreateWithUser(settings.ClientId ?? settings.SentFromEmailAddress);
-                });
+                HttpClientInitializer = credential,
+                ApplicationName = "SimpleBol"
+            });
+        }
 
-                // Create the Gmail service
-                service = new GmailService(new BaseClientService.Initializer()
+        private static async Task<UserCredential> GetCredentialAsync(
+            SimpleBol.Models.Gmail settings, CancellationToken cancellationToken)
+        {
+            ValidateOAuthSettings(settings);
+            return await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                new ClientSecrets
                 {
-                    HttpClientInitializer = credential,
-                    ApplicationName = "SimpleBol 2024"
-                });
+                    ClientId = settings.ClientId,
+                    ClientSecret = settings.ClientSecret
+                },
+                [GmailService.Scope.GmailSend],
+                CreateAuthorizationKey(settings),
+                cancellationToken,
+                new ProtectedDataStore());
+        }
+
+        private static string CreateAuthorizationKey(SimpleBol.Models.Gmail settings) =>
+            $"SimpleBol.Gmail.{settings.SentFromEmailAddress?.Trim().ToLowerInvariant() ?? "unknown"}";
+
+        private static void ValidateOAuthSettings(SimpleBol.Models.Gmail settings)
+        {
+            if (string.IsNullOrWhiteSpace(settings.ClientId) ||
+                string.IsNullOrWhiteSpace(settings.ClientSecret))
+            {
+                throw new InvalidOperationException(
+                    "Gmail OAuth Client ID and Client Secret are required.");
             }
-
-            return service;
         }
 
         private Google.Apis.Gmail.v1.Data.Message? CreateMessage(
@@ -121,11 +156,11 @@ namespace SimpleBol.Services.sendEngine
                 var msg = new MimeKit.MimeMessage();
 
                 // Create the SendFrom object
-                if (settings.SentFromEmailAddress != null && settings.SentFromName != null)
+                var senderEmailAddress = settings.SentFromEmailAddress ?? mailMessage.SendFrom?.Email;
+                if (!string.IsNullOrWhiteSpace(senderEmailAddress))
                 {
-                    var senderName = settings.SentFromName;
-                    var senderEmailAddrsss = settings.SentFromEmailAddress;                    
-                    msg.From.Add(new MimeKit.MailboxAddress(senderName, senderEmailAddrsss));
+                    var senderName = settings.SentFromName ?? mailMessage.SendFrom?.Name ?? "SimpleBol";
+                    msg.From.Add(new MimeKit.MailboxAddress(senderName, senderEmailAddress));
                 }
 
                 // Create the SendTo object
@@ -189,7 +224,7 @@ namespace SimpleBol.Services.sendEngine
             return rawMessage;
         }
 
-        private SmtpResponse BuildSendGripSmtpResponse(Google.Apis.Gmail.v1.Data.Message response, Exception? ex)
+        private EmailResponse BuildSendGripSmtpResponse(Google.Apis.Gmail.v1.Data.Message response, Exception? ex)
         {
             bool transmissionSuccess = response != null;
             HttpContent? responseBody = null;
@@ -219,7 +254,7 @@ namespace SimpleBol.Services.sendEngine
             }
 
             // Process the response if needed
-            var smtpResponse = new SmtpResponse(
+            var smtpResponse = new EmailResponse(
                 success: transmissionSuccess,
                 statusCode: statusCode,
                 body: responseBody,

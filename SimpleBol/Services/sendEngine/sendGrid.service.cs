@@ -14,7 +14,7 @@ namespace SimpleBol.Services.sendEngine
 {
     public interface ISendGridSender
     {
-        Task<SmtpResponse?> SendEmailMessageAsync(
+        Task<EmailResponse?> SendEmailMessageAsync(
             SimpleBol.Models.SendGrid settings,
             SimpleBol.Models.Smtp.MailMessage mailMessage,
             CancellationToken cancellationToken = default);
@@ -26,12 +26,12 @@ namespace SimpleBol.Services.sendEngine
         // Initialize the logger
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public async Task<SmtpResponse?> SendEmailMessageAsync(
+        public async Task<EmailResponse?> SendEmailMessageAsync(
             SimpleBol.Models.SendGrid settings,
             SimpleBol.Models.Smtp.MailMessage mailMessage,
             CancellationToken cancellationToken = default)
         {
-            SmtpResponse? smtpResponse = null;
+            EmailResponse? smtpResponse = null;
             Response? sendGridResponse = null;
 
             if (settings.ApiKey != null)
@@ -139,17 +139,17 @@ namespace SimpleBol.Services.sendEngine
             return smtpResponse;
         }
 
-        private SmtpResponse BuildSendGripSmtpResponse(Response response, Exception? ex)
+        private EmailResponse BuildSendGripSmtpResponse(Response response, Exception? ex)
         {
             HttpStatusCode statusCode = response.StatusCode;
-            bool transmissionSuccess = statusCode == HttpStatusCode.OK;
+            bool transmissionSuccess = (int)statusCode >= 200 && (int)statusCode < 300;
             System.Net.Http.HttpContent responseBody = response.Body;
             HttpResponseHeaders responseHeaders = response.Headers;
             string exceptionMessage = "";
                         
             // Calculate SmtpError
             SmtpError errorType = SmtpError.None;
-            if (statusCode != HttpStatusCode.OK)
+            if (!transmissionSuccess)
             {
                 errorType = SmtpError.Smtp_Code; // Consider other status codes for different errors
             }
@@ -161,7 +161,7 @@ namespace SimpleBol.Services.sendEngine
             } 
 
             // Process the response if needed
-            var smtpResponse = new SmtpResponse(
+            var smtpResponse = new EmailResponse(
                 success: transmissionSuccess,
                 statusCode: statusCode,
                 body: responseBody,

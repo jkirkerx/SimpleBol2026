@@ -34,37 +34,6 @@
             Lbl_Header = new Label();
             PbLogo = new PictureBox();
             tabControlSmtpApiSettings = new TabControl();
-            tabPageSendGrid = new TabPage();
-            groupBoxSendGridAPI = new GroupBox();
-            checkBoxSendGridDefault = new CheckBox();
-            textBoxSendGridSentFrom = new TextBox();
-            labelSendGridSentFrom = new Label();
-            textBoxSendGridApiKey = new TextBox();
-            labelSendGridApiKey = new Label();
-            tabPageGmail = new TabPage();
-            groupBox1 = new GroupBox();
-            textBoxGmailServiceId = new TextBox();
-            labelGmailServiceId = new Label();
-            textBoxGmailApiKey = new TextBox();
-            labelGmailApiKey = new Label();
-            checkBoxGmailDefault = new CheckBox();
-            textBoxGmailSentFromAddress = new TextBox();
-            label2 = new Label();
-            textBoxGmailClientSecret = new TextBox();
-            labelGmailClientSecret = new Label();
-            textBoxGmailClientId = new TextBox();
-            labelGmailClientId = new Label();
-            tabPageOutlook = new TabPage();
-            groupBox2 = new GroupBox();
-            textBoxOutlookTenantId = new TextBox();
-            labelOutlookTenantId = new Label();
-            checkBoxOutlookDefault = new CheckBox();
-            textBoxOutlookSentFromAddress = new TextBox();
-            label1 = new Label();
-            textBoxOutlookClientSecret = new TextBox();
-            labelOutlookClientSecret = new Label();
-            textBoxOutlookClientId = new TextBox();
-            labelOutlookClientId = new Label();
             tabPageCompanyInfo = new TabPage();
             groupBoxCompanyInfo = new GroupBox();
             comboBoxRegion = new ComboBox();
@@ -81,23 +50,53 @@
             labelAddress1 = new Label();
             textBoxCompanyName = new TextBox();
             labelCompanyName = new Label();
+            tabPageSendGrid = new TabPage();
+            groupBoxSendGridAPI = new GroupBox();
+            checkBoxSendGridDefault = new CheckBox();
+            textBoxSendGridSentFrom = new TextBox();
+            labelSendGridSentFrom = new Label();
+            textBoxSendGridApiKey = new TextBox();
+            labelSendGridApiKey = new Label();
+            tabPageGmail = new TabPage();
+            groupBox1 = new GroupBox();
+            buttonConnectGmail = new Button();
+            labelGmailConnectionStatus = new Label();
+            checkBoxGmailDefault = new CheckBox();
+            textBoxGmailSentFromAddress = new TextBox();
+            label2 = new Label();
+            textBoxGmailClientSecret = new TextBox();
+            labelGmailClientSecret = new Label();
+            textBoxGmailClientId = new TextBox();
+            labelGmailClientId = new Label();
+            tabPageOutlook = new TabPage();
+            groupBox2 = new GroupBox();
+            labelOutlookConnectionStatus = new Label();
+            buttonConnectOutlook = new Button();
+            textBoxOutlookTenantId = new TextBox();
+            labelOutlookTenantId = new Label();
+            checkBoxOutlookDefault = new CheckBox();
+            textBoxOutlookSentFromAddress = new TextBox();
+            label1 = new Label();
+            textBoxOutlookClientId = new TextBox();
+            labelOutlookClientId = new Label();
             OK_Button = new Button();
             Cancel_Button = new Button();
             errorProvider1 = new ErrorProvider(components);
             comboBoxDefaultApi = new ComboBox();
             labelDefaultApi = new Label();
-            checkBoxSaveToCloud = new CheckBox();
+            comboBoxEmailConnection = new ComboBox();
+            labelConnection = new Label();
             panelHeeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PbLogo).BeginInit();
             tabControlSmtpApiSettings.SuspendLayout();
+            tabPageCompanyInfo.SuspendLayout();
+            groupBoxCompanyInfo.SuspendLayout();
             tabPageSendGrid.SuspendLayout();
             groupBoxSendGridAPI.SuspendLayout();
             tabPageGmail.SuspendLayout();
             groupBox1.SuspendLayout();
             tabPageOutlook.SuspendLayout();
             groupBox2.SuspendLayout();
-            tabPageCompanyInfo.SuspendLayout();
-            groupBoxCompanyInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -119,9 +118,9 @@
             Lbl_Header.ForeColor = Color.White;
             Lbl_Header.Location = new Point(85, 13);
             Lbl_Header.Name = "Lbl_Header";
-            Lbl_Header.Size = new Size(282, 45);
+            Lbl_Header.Size = new Size(380, 45);
             Lbl_Header.TabIndex = 1;
-            Lbl_Header.Text = "SMTP API Settings";
+            Lbl_Header.Text = "Email API/OAuth Settings";
             // 
             // PbLogo
             // 
@@ -143,316 +142,11 @@
             tabControlSmtpApiSettings.Controls.Add(tabPageGmail);
             tabControlSmtpApiSettings.Controls.Add(tabPageOutlook);
             tabControlSmtpApiSettings.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            tabControlSmtpApiSettings.Location = new Point(22, 88);
+            tabControlSmtpApiSettings.Location = new Point(22, 158);
             tabControlSmtpApiSettings.Name = "tabControlSmtpApiSettings";
             tabControlSmtpApiSettings.SelectedIndex = 0;
             tabControlSmtpApiSettings.Size = new Size(538, 611);
             tabControlSmtpApiSettings.TabIndex = 1;
-            // 
-            // tabPageSendGrid
-            // 
-            tabPageSendGrid.BackColor = Color.Black;
-            tabPageSendGrid.Controls.Add(groupBoxSendGridAPI);
-            tabPageSendGrid.ForeColor = Color.White;
-            tabPageSendGrid.Location = new Point(4, 24);
-            tabPageSendGrid.Name = "tabPageSendGrid";
-            tabPageSendGrid.Padding = new Padding(3);
-            tabPageSendGrid.Size = new Size(530, 583);
-            tabPageSendGrid.TabIndex = 0;
-            tabPageSendGrid.Text = "Twillo Send Grid";
-            // 
-            // groupBoxSendGridAPI
-            // 
-            groupBoxSendGridAPI.Controls.Add(checkBoxSendGridDefault);
-            groupBoxSendGridAPI.Controls.Add(textBoxSendGridSentFrom);
-            groupBoxSendGridAPI.Controls.Add(labelSendGridSentFrom);
-            groupBoxSendGridAPI.Controls.Add(textBoxSendGridApiKey);
-            groupBoxSendGridAPI.Controls.Add(labelSendGridApiKey);
-            groupBoxSendGridAPI.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            groupBoxSendGridAPI.ForeColor = Color.White;
-            groupBoxSendGridAPI.Location = new Point(21, 22);
-            groupBoxSendGridAPI.Name = "groupBoxSendGridAPI";
-            groupBoxSendGridAPI.Size = new Size(488, 549);
-            groupBoxSendGridAPI.TabIndex = 2;
-            groupBoxSendGridAPI.TabStop = false;
-            groupBoxSendGridAPI.Text = "SendGrid API";
-            // 
-            // checkBoxSendGridDefault
-            // 
-            checkBoxSendGridDefault.AutoSize = true;
-            checkBoxSendGridDefault.Location = new Point(28, 180);
-            checkBoxSendGridDefault.Name = "checkBoxSendGridDefault";
-            checkBoxSendGridDefault.Size = new Size(197, 24);
-            checkBoxSendGridDefault.TabIndex = 5;
-            checkBoxSendGridDefault.Text = "Use SendGrid as Default";
-            checkBoxSendGridDefault.UseVisualStyleBackColor = true;
-            checkBoxSendGridDefault.CheckedChanged += CheckBoxSendGridDefault_CheckedChanged;
-            // 
-            // textBoxSendGridSentFrom
-            // 
-            textBoxSendGridSentFrom.Location = new Point(28, 128);
-            textBoxSendGridSentFrom.Name = "textBoxSendGridSentFrom";
-            textBoxSendGridSentFrom.Size = new Size(432, 27);
-            textBoxSendGridSentFrom.TabIndex = 4;
-            textBoxSendGridSentFrom.Validating += textBoxEmailValidating_Validating;
-            // 
-            // labelSendGridSentFrom
-            // 
-            labelSendGridSentFrom.AutoSize = true;
-            labelSendGridSentFrom.Location = new Point(38, 105);
-            labelSendGridSentFrom.Name = "labelSendGridSentFrom";
-            labelSendGridSentFrom.Size = new Size(290, 20);
-            labelSendGridSentFrom.TabIndex = 3;
-            labelSendGridSentFrom.Text = "Special SendGrid Account Email Address";
-            // 
-            // textBoxSendGridApiKey
-            // 
-            textBoxSendGridApiKey.Location = new Point(28, 57);
-            textBoxSendGridApiKey.Name = "textBoxSendGridApiKey";
-            textBoxSendGridApiKey.Size = new Size(432, 27);
-            textBoxSendGridApiKey.TabIndex = 3;
-            // 
-            // labelSendGridApiKey
-            // 
-            labelSendGridApiKey.AutoSize = true;
-            labelSendGridApiKey.Location = new Point(38, 34);
-            labelSendGridApiKey.Name = "labelSendGridApiKey";
-            labelSendGridApiKey.Size = new Size(132, 20);
-            labelSendGridApiKey.TabIndex = 1;
-            labelSendGridApiKey.Text = "SendGrid API Key";
-            // 
-            // tabPageGmail
-            // 
-            tabPageGmail.BackColor = Color.Black;
-            tabPageGmail.Controls.Add(groupBox1);
-            tabPageGmail.ForeColor = Color.White;
-            tabPageGmail.Location = new Point(4, 24);
-            tabPageGmail.Name = "tabPageGmail";
-            tabPageGmail.Padding = new Padding(3);
-            tabPageGmail.Size = new Size(530, 583);
-            tabPageGmail.TabIndex = 1;
-            tabPageGmail.Text = "Google Gmail";
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(textBoxGmailServiceId);
-            groupBox1.Controls.Add(labelGmailServiceId);
-            groupBox1.Controls.Add(textBoxGmailApiKey);
-            groupBox1.Controls.Add(labelGmailApiKey);
-            groupBox1.Controls.Add(checkBoxGmailDefault);
-            groupBox1.Controls.Add(textBoxGmailSentFromAddress);
-            groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(textBoxGmailClientSecret);
-            groupBox1.Controls.Add(labelGmailClientSecret);
-            groupBox1.Controls.Add(textBoxGmailClientId);
-            groupBox1.Controls.Add(labelGmailClientId);
-            groupBox1.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(21, 22);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(488, 549);
-            groupBox1.TabIndex = 2;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Google Gmail API";
-            // 
-            // textBoxGmailServiceId
-            // 
-            textBoxGmailServiceId.Location = new Point(38, 184);
-            textBoxGmailServiceId.Name = "textBoxGmailServiceId";
-            textBoxGmailServiceId.Size = new Size(407, 27);
-            textBoxGmailServiceId.TabIndex = 10;
-            // 
-            // labelGmailServiceId
-            // 
-            labelGmailServiceId.AutoSize = true;
-            labelGmailServiceId.Location = new Point(38, 161);
-            labelGmailServiceId.Name = "labelGmailServiceId";
-            labelGmailServiceId.Size = new Size(122, 20);
-            labelGmailServiceId.TabIndex = 9;
-            labelGmailServiceId.Text = "Gmail Service Id";
-            // 
-            // textBoxGmailApiKey
-            // 
-            textBoxGmailApiKey.Location = new Point(38, 257);
-            textBoxGmailApiKey.Name = "textBoxGmailApiKey";
-            textBoxGmailApiKey.Size = new Size(407, 27);
-            textBoxGmailApiKey.TabIndex = 8;
-            // 
-            // labelGmailApiKey
-            // 
-            labelGmailApiKey.AutoSize = true;
-            labelGmailApiKey.Location = new Point(38, 234);
-            labelGmailApiKey.Name = "labelGmailApiKey";
-            labelGmailApiKey.Size = new Size(109, 20);
-            labelGmailApiKey.TabIndex = 7;
-            labelGmailApiKey.Text = "Gmail API Key";
-            // 
-            // checkBoxGmailDefault
-            // 
-            checkBoxGmailDefault.AutoSize = true;
-            checkBoxGmailDefault.Location = new Point(38, 392);
-            checkBoxGmailDefault.Name = "checkBoxGmailDefault";
-            checkBoxGmailDefault.Size = new Size(174, 24);
-            checkBoxGmailDefault.TabIndex = 6;
-            checkBoxGmailDefault.Text = "Use Gmail as Default";
-            checkBoxGmailDefault.UseVisualStyleBackColor = true;
-            checkBoxGmailDefault.CheckedChanged += CheckBoxGmailDefault_CheckedChanged;
-            // 
-            // textBoxGmailSentFromAddress
-            // 
-            textBoxGmailSentFromAddress.Location = new Point(38, 334);
-            textBoxGmailSentFromAddress.Name = "textBoxGmailSentFromAddress";
-            textBoxGmailSentFromAddress.Size = new Size(407, 27);
-            textBoxGmailSentFromAddress.TabIndex = 5;
-            textBoxGmailSentFromAddress.Validating += textBoxEmailValidating_Validating;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(38, 311);
-            label2.Name = "label2";
-            label2.Size = new Size(267, 20);
-            label2.TabIndex = 5;
-            label2.Text = "Special Gmail Account Email Address";
-            // 
-            // textBoxGmailClientSecret
-            // 
-            textBoxGmailClientSecret.Location = new Point(38, 118);
-            textBoxGmailClientSecret.Name = "textBoxGmailClientSecret";
-            textBoxGmailClientSecret.Size = new Size(407, 27);
-            textBoxGmailClientSecret.TabIndex = 4;
-            // 
-            // labelGmailClientSecret
-            // 
-            labelGmailClientSecret.AutoSize = true;
-            labelGmailClientSecret.Location = new Point(38, 95);
-            labelGmailClientSecret.Name = "labelGmailClientSecret";
-            labelGmailClientSecret.Size = new Size(141, 20);
-            labelGmailClientSecret.TabIndex = 3;
-            labelGmailClientSecret.Text = "Gmail Client Secret";
-            // 
-            // textBoxGmailClientId
-            // 
-            textBoxGmailClientId.Location = new Point(38, 57);
-            textBoxGmailClientId.Name = "textBoxGmailClientId";
-            textBoxGmailClientId.Size = new Size(407, 27);
-            textBoxGmailClientId.TabIndex = 3;
-            // 
-            // labelGmailClientId
-            // 
-            labelGmailClientId.AutoSize = true;
-            labelGmailClientId.Location = new Point(38, 34);
-            labelGmailClientId.Name = "labelGmailClientId";
-            labelGmailClientId.Size = new Size(112, 20);
-            labelGmailClientId.TabIndex = 1;
-            labelGmailClientId.Text = "Gmail Client Id";
-            // 
-            // tabPageOutlook
-            // 
-            tabPageOutlook.BackColor = Color.Black;
-            tabPageOutlook.Controls.Add(groupBox2);
-            tabPageOutlook.ForeColor = Color.White;
-            tabPageOutlook.Location = new Point(4, 24);
-            tabPageOutlook.Name = "tabPageOutlook";
-            tabPageOutlook.Size = new Size(530, 583);
-            tabPageOutlook.TabIndex = 2;
-            tabPageOutlook.Text = "Microsoft Outlook 365";
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(textBoxOutlookTenantId);
-            groupBox2.Controls.Add(labelOutlookTenantId);
-            groupBox2.Controls.Add(checkBoxOutlookDefault);
-            groupBox2.Controls.Add(textBoxOutlookSentFromAddress);
-            groupBox2.Controls.Add(label1);
-            groupBox2.Controls.Add(textBoxOutlookClientSecret);
-            groupBox2.Controls.Add(labelOutlookClientSecret);
-            groupBox2.Controls.Add(textBoxOutlookClientId);
-            groupBox2.Controls.Add(labelOutlookClientId);
-            groupBox2.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            groupBox2.ForeColor = Color.White;
-            groupBox2.Location = new Point(21, 22);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(488, 549);
-            groupBox2.TabIndex = 2;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Outlook 365 API";
-            // 
-            // textBoxOutlookTenantId
-            // 
-            textBoxOutlookTenantId.Location = new Point(29, 184);
-            textBoxOutlookTenantId.Name = "textBoxOutlookTenantId";
-            textBoxOutlookTenantId.Size = new Size(431, 27);
-            textBoxOutlookTenantId.TabIndex = 5;
-            // 
-            // labelOutlookTenantId
-            // 
-            labelOutlookTenantId.AutoSize = true;
-            labelOutlookTenantId.Location = new Point(29, 161);
-            labelOutlookTenantId.Name = "labelOutlookTenantId";
-            labelOutlookTenantId.Size = new Size(135, 20);
-            labelOutlookTenantId.TabIndex = 8;
-            labelOutlookTenantId.Text = "Outlook Tenant Id";
-            // 
-            // checkBoxOutlookDefault
-            // 
-            checkBoxOutlookDefault.AutoSize = true;
-            checkBoxOutlookDefault.Location = new Point(29, 311);
-            checkBoxOutlookDefault.Name = "checkBoxOutlookDefault";
-            checkBoxOutlookDefault.Size = new Size(220, 24);
-            checkBoxOutlookDefault.TabIndex = 7;
-            checkBoxOutlookDefault.Text = "Use Outlook 365 as Default";
-            checkBoxOutlookDefault.UseVisualStyleBackColor = true;
-            checkBoxOutlookDefault.CheckedChanged += CheckBoxOutlookDefault_CheckedChanged;
-            // 
-            // textBoxOutlookSentFromAddress
-            // 
-            textBoxOutlookSentFromAddress.Location = new Point(29, 256);
-            textBoxOutlookSentFromAddress.Name = "textBoxOutlookSentFromAddress";
-            textBoxOutlookSentFromAddress.Size = new Size(431, 27);
-            textBoxOutlookSentFromAddress.TabIndex = 6;
-            textBoxOutlookSentFromAddress.Validating += textBoxEmailValidating_Validating;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(29, 233);
-            label1.Name = "label1";
-            label1.Size = new Size(202, 20);
-            label1.TabIndex = 5;
-            label1.Text = "Sent From Outlook Address";
-            // 
-            // textBoxOutlookClientSecret
-            // 
-            textBoxOutlookClientSecret.Location = new Point(29, 118);
-            textBoxOutlookClientSecret.Name = "textBoxOutlookClientSecret";
-            textBoxOutlookClientSecret.Size = new Size(431, 27);
-            textBoxOutlookClientSecret.TabIndex = 4;
-            // 
-            // labelOutlookClientSecret
-            // 
-            labelOutlookClientSecret.AutoSize = true;
-            labelOutlookClientSecret.Location = new Point(29, 95);
-            labelOutlookClientSecret.Name = "labelOutlookClientSecret";
-            labelOutlookClientSecret.Size = new Size(156, 20);
-            labelOutlookClientSecret.TabIndex = 3;
-            labelOutlookClientSecret.Text = "Outlook Client Secret";
-            // 
-            // textBoxOutlookClientId
-            // 
-            textBoxOutlookClientId.Location = new Point(29, 57);
-            textBoxOutlookClientId.Name = "textBoxOutlookClientId";
-            textBoxOutlookClientId.Size = new Size(431, 27);
-            textBoxOutlookClientId.TabIndex = 3;
-            // 
-            // labelOutlookClientId
-            // 
-            labelOutlookClientId.AutoSize = true;
-            labelOutlookClientId.Location = new Point(29, 34);
-            labelOutlookClientId.Name = "labelOutlookClientId";
-            labelOutlookClientId.Size = new Size(127, 20);
-            labelOutlookClientId.TabIndex = 1;
-            labelOutlookClientId.Text = "Outlook Client Id";
             // 
             // tabPageCompanyInfo
             // 
@@ -625,6 +319,316 @@
             labelCompanyName.TabIndex = 32;
             labelCompanyName.Text = "Company Name (required)";
             // 
+            // tabPageSendGrid
+            // 
+            tabPageSendGrid.BackColor = Color.Black;
+            tabPageSendGrid.Controls.Add(groupBoxSendGridAPI);
+            tabPageSendGrid.ForeColor = Color.White;
+            tabPageSendGrid.Location = new Point(4, 24);
+            tabPageSendGrid.Name = "tabPageSendGrid";
+            tabPageSendGrid.Padding = new Padding(3);
+            tabPageSendGrid.Size = new Size(530, 583);
+            tabPageSendGrid.TabIndex = 0;
+            tabPageSendGrid.Text = "Twilio SendGrid";
+            // 
+            // groupBoxSendGridAPI
+            // 
+            groupBoxSendGridAPI.Controls.Add(checkBoxSendGridDefault);
+            groupBoxSendGridAPI.Controls.Add(textBoxSendGridSentFrom);
+            groupBoxSendGridAPI.Controls.Add(labelSendGridSentFrom);
+            groupBoxSendGridAPI.Controls.Add(textBoxSendGridApiKey);
+            groupBoxSendGridAPI.Controls.Add(labelSendGridApiKey);
+            groupBoxSendGridAPI.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            groupBoxSendGridAPI.ForeColor = Color.White;
+            groupBoxSendGridAPI.Location = new Point(21, 22);
+            groupBoxSendGridAPI.Name = "groupBoxSendGridAPI";
+            groupBoxSendGridAPI.Size = new Size(488, 549);
+            groupBoxSendGridAPI.TabIndex = 2;
+            groupBoxSendGridAPI.TabStop = false;
+            groupBoxSendGridAPI.Text = "SendGrid API";
+            // 
+            // checkBoxSendGridDefault
+            // 
+            checkBoxSendGridDefault.AutoSize = true;
+            checkBoxSendGridDefault.Location = new Point(28, 180);
+            checkBoxSendGridDefault.Name = "checkBoxSendGridDefault";
+            checkBoxSendGridDefault.Size = new Size(197, 24);
+            checkBoxSendGridDefault.TabIndex = 5;
+            checkBoxSendGridDefault.Text = "Use SendGrid as Default";
+            checkBoxSendGridDefault.UseVisualStyleBackColor = true;
+            checkBoxSendGridDefault.CheckedChanged += CheckBoxSendGridDefault_CheckedChanged;
+            // 
+            // textBoxSendGridSentFrom
+            // 
+            textBoxSendGridSentFrom.Location = new Point(28, 128);
+            textBoxSendGridSentFrom.Name = "textBoxSendGridSentFrom";
+            textBoxSendGridSentFrom.Size = new Size(432, 27);
+            textBoxSendGridSentFrom.TabIndex = 4;
+            textBoxSendGridSentFrom.Validating += textBoxEmailValidating_Validating;
+            // 
+            // labelSendGridSentFrom
+            // 
+            labelSendGridSentFrom.AutoSize = true;
+            labelSendGridSentFrom.Location = new Point(38, 105);
+            labelSendGridSentFrom.Name = "labelSendGridSentFrom";
+            labelSendGridSentFrom.Size = new Size(290, 20);
+            labelSendGridSentFrom.TabIndex = 3;
+            labelSendGridSentFrom.Text = "Special SendGrid Account Email Address";
+            // 
+            // textBoxSendGridApiKey
+            // 
+            textBoxSendGridApiKey.Location = new Point(28, 57);
+            textBoxSendGridApiKey.Name = "textBoxSendGridApiKey";
+            textBoxSendGridApiKey.Size = new Size(432, 27);
+            textBoxSendGridApiKey.TabIndex = 3;
+            // 
+            // labelSendGridApiKey
+            // 
+            labelSendGridApiKey.AutoSize = true;
+            labelSendGridApiKey.Location = new Point(38, 34);
+            labelSendGridApiKey.Name = "labelSendGridApiKey";
+            labelSendGridApiKey.Size = new Size(132, 20);
+            labelSendGridApiKey.TabIndex = 1;
+            labelSendGridApiKey.Text = "SendGrid API Key";
+            // 
+            // tabPageGmail
+            // 
+            tabPageGmail.BackColor = Color.Black;
+            tabPageGmail.Controls.Add(groupBox1);
+            tabPageGmail.ForeColor = Color.White;
+            tabPageGmail.Location = new Point(4, 24);
+            tabPageGmail.Name = "tabPageGmail";
+            tabPageGmail.Padding = new Padding(3);
+            tabPageGmail.Size = new Size(530, 583);
+            tabPageGmail.TabIndex = 1;
+            tabPageGmail.Text = "Google Gmail";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(buttonConnectGmail);
+            groupBox1.Controls.Add(labelGmailConnectionStatus);
+            groupBox1.Controls.Add(checkBoxGmailDefault);
+            groupBox1.Controls.Add(textBoxGmailSentFromAddress);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(textBoxGmailClientSecret);
+            groupBox1.Controls.Add(labelGmailClientSecret);
+            groupBox1.Controls.Add(textBoxGmailClientId);
+            groupBox1.Controls.Add(labelGmailClientId);
+            groupBox1.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            groupBox1.ForeColor = Color.White;
+            groupBox1.Location = new Point(21, 22);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(488, 549);
+            groupBox1.TabIndex = 2;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Google Gmail API";
+            // 
+            // buttonConnectGmail
+            // 
+            buttonConnectGmail.BackColor = Color.FromArgb(60, 60, 60);
+            buttonConnectGmail.FlatAppearance.BorderSize = 0;
+            buttonConnectGmail.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
+            buttonConnectGmail.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+            buttonConnectGmail.FlatStyle = FlatStyle.Flat;
+            buttonConnectGmail.Font = new Font("Segoe UI", 11F);
+            buttonConnectGmail.Location = new Point(38, 302);
+            buttonConnectGmail.Name = "buttonConnectGmail";
+            buttonConnectGmail.Size = new Size(165, 34);
+            buttonConnectGmail.TabIndex = 11;
+            buttonConnectGmail.Text = "Connect Gmail";
+            buttonConnectGmail.UseVisualStyleBackColor = false;
+            buttonConnectGmail.Click += ButtonConnectGmail_Click;
+            // 
+            // labelGmailConnectionStatus
+            // 
+            labelGmailConnectionStatus.AutoSize = true;
+            labelGmailConnectionStatus.Location = new Point(38, 352);
+            labelGmailConnectionStatus.Name = "labelGmailConnectionStatus";
+            labelGmailConnectionStatus.Size = new Size(112, 20);
+            labelGmailConnectionStatus.TabIndex = 12;
+            labelGmailConnectionStatus.Text = "Not connected";
+            // 
+            // checkBoxGmailDefault
+            // 
+            checkBoxGmailDefault.AutoSize = true;
+            checkBoxGmailDefault.Location = new Point(271, 308);
+            checkBoxGmailDefault.Name = "checkBoxGmailDefault";
+            checkBoxGmailDefault.Size = new Size(174, 24);
+            checkBoxGmailDefault.TabIndex = 6;
+            checkBoxGmailDefault.Text = "Use Gmail as Default";
+            checkBoxGmailDefault.UseVisualStyleBackColor = true;
+            checkBoxGmailDefault.CheckedChanged += CheckBoxGmailDefault_CheckedChanged;
+            // 
+            // textBoxGmailSentFromAddress
+            // 
+            textBoxGmailSentFromAddress.Location = new Point(38, 250);
+            textBoxGmailSentFromAddress.Name = "textBoxGmailSentFromAddress";
+            textBoxGmailSentFromAddress.Size = new Size(407, 27);
+            textBoxGmailSentFromAddress.TabIndex = 5;
+            textBoxGmailSentFromAddress.Validating += textBoxEmailValidating_Validating;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(38, 227);
+            label2.Name = "label2";
+            label2.Size = new Size(215, 20);
+            label2.TabIndex = 5;
+            label2.Text = "Gmail Account Email Address";
+            // 
+            // textBoxGmailClientSecret
+            // 
+            textBoxGmailClientSecret.Location = new Point(38, 148);
+            textBoxGmailClientSecret.Multiline = true;
+            textBoxGmailClientSecret.Name = "textBoxGmailClientSecret";
+            textBoxGmailClientSecret.Size = new Size(407, 50);
+            textBoxGmailClientSecret.TabIndex = 4;
+            // 
+            // labelGmailClientSecret
+            // 
+            labelGmailClientSecret.AutoSize = true;
+            labelGmailClientSecret.Location = new Point(38, 125);
+            labelGmailClientSecret.Name = "labelGmailClientSecret";
+            labelGmailClientSecret.Size = new Size(208, 20);
+            labelGmailClientSecret.TabIndex = 3;
+            labelGmailClientSecret.Text = "OAuth Desktop Client Secret";
+            // 
+            // textBoxGmailClientId
+            // 
+            textBoxGmailClientId.Location = new Point(38, 57);
+            textBoxGmailClientId.Multiline = true;
+            textBoxGmailClientId.Name = "textBoxGmailClientId";
+            textBoxGmailClientId.Size = new Size(407, 50);
+            textBoxGmailClientId.TabIndex = 3;
+            // 
+            // labelGmailClientId
+            // 
+            labelGmailClientId.AutoSize = true;
+            labelGmailClientId.Location = new Point(38, 34);
+            labelGmailClientId.Name = "labelGmailClientId";
+            labelGmailClientId.Size = new Size(181, 20);
+            labelGmailClientId.TabIndex = 1;
+            labelGmailClientId.Text = "OAuth Desktop Client ID";
+            // 
+            // tabPageOutlook
+            // 
+            tabPageOutlook.BackColor = Color.Black;
+            tabPageOutlook.Controls.Add(groupBox2);
+            tabPageOutlook.ForeColor = Color.White;
+            tabPageOutlook.Location = new Point(4, 24);
+            tabPageOutlook.Name = "tabPageOutlook";
+            tabPageOutlook.Size = new Size(530, 583);
+            tabPageOutlook.TabIndex = 2;
+            tabPageOutlook.Text = "Microsoft Outlook 365";
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(labelOutlookConnectionStatus);
+            groupBox2.Controls.Add(buttonConnectOutlook);
+            groupBox2.Controls.Add(textBoxOutlookTenantId);
+            groupBox2.Controls.Add(labelOutlookTenantId);
+            groupBox2.Controls.Add(checkBoxOutlookDefault);
+            groupBox2.Controls.Add(textBoxOutlookSentFromAddress);
+            groupBox2.Controls.Add(label1);
+            groupBox2.Controls.Add(textBoxOutlookClientId);
+            groupBox2.Controls.Add(labelOutlookClientId);
+            groupBox2.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            groupBox2.ForeColor = Color.White;
+            groupBox2.Location = new Point(21, 22);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(488, 549);
+            groupBox2.TabIndex = 2;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Microsoft Outlook OAuth";
+            // 
+            // labelOutlookConnectionStatus
+            // 
+            labelOutlookConnectionStatus.AutoSize = true;
+            labelOutlookConnectionStatus.Location = new Point(29, 337);
+            labelOutlookConnectionStatus.Name = "labelOutlookConnectionStatus";
+            labelOutlookConnectionStatus.Size = new Size(112, 20);
+            labelOutlookConnectionStatus.TabIndex = 11;
+            labelOutlookConnectionStatus.Text = "Not connected";
+            // 
+            // buttonConnectOutlook
+            // 
+            buttonConnectOutlook.BackColor = Color.FromArgb(60, 60, 60);
+            buttonConnectOutlook.FlatAppearance.BorderSize = 0;
+            buttonConnectOutlook.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
+            buttonConnectOutlook.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+            buttonConnectOutlook.FlatStyle = FlatStyle.Flat;
+            buttonConnectOutlook.Font = new Font("Segoe UI", 10F);
+            buttonConnectOutlook.ForeColor = Color.White;
+            buttonConnectOutlook.Location = new Point(29, 282);
+            buttonConnectOutlook.Name = "buttonConnectOutlook";
+            buttonConnectOutlook.Size = new Size(165, 35);
+            buttonConnectOutlook.TabIndex = 8;
+            buttonConnectOutlook.Text = "Connect Outlook";
+            buttonConnectOutlook.UseVisualStyleBackColor = false;
+            buttonConnectOutlook.Click += ButtonConnectOutlook_Click;
+            // 
+            // textBoxOutlookTenantId
+            // 
+            textBoxOutlookTenantId.Location = new Point(29, 148);
+            textBoxOutlookTenantId.Name = "textBoxOutlookTenantId";
+            textBoxOutlookTenantId.Size = new Size(431, 27);
+            textBoxOutlookTenantId.TabIndex = 5;
+            textBoxOutlookTenantId.Text = "common";
+            // 
+            // labelOutlookTenantId
+            // 
+            labelOutlookTenantId.AutoSize = true;
+            labelOutlookTenantId.Location = new Point(29, 125);
+            labelOutlookTenantId.Name = "labelOutlookTenantId";
+            labelOutlookTenantId.Size = new Size(314, 20);
+            labelOutlookTenantId.TabIndex = 8;
+            labelOutlookTenantId.Text = "Tenant ID (use common for most accounts)";
+            // 
+            // checkBoxOutlookDefault
+            // 
+            checkBoxOutlookDefault.AutoSize = true;
+            checkBoxOutlookDefault.Location = new Point(215, 288);
+            checkBoxOutlookDefault.Name = "checkBoxOutlookDefault";
+            checkBoxOutlookDefault.Size = new Size(220, 24);
+            checkBoxOutlookDefault.TabIndex = 7;
+            checkBoxOutlookDefault.Text = "Use Outlook 365 as Default";
+            checkBoxOutlookDefault.UseVisualStyleBackColor = true;
+            checkBoxOutlookDefault.CheckedChanged += CheckBoxOutlookDefault_CheckedChanged;
+            // 
+            // textBoxOutlookSentFromAddress
+            // 
+            textBoxOutlookSentFromAddress.Location = new Point(29, 227);
+            textBoxOutlookSentFromAddress.Name = "textBoxOutlookSentFromAddress";
+            textBoxOutlookSentFromAddress.Size = new Size(431, 27);
+            textBoxOutlookSentFromAddress.TabIndex = 6;
+            textBoxOutlookSentFromAddress.Validating += textBoxEmailValidating_Validating;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(29, 204);
+            label1.Name = "label1";
+            label1.Size = new Size(242, 20);
+            label1.TabIndex = 5;
+            label1.Text = "Microsoft Account Email Address";
+            // 
+            // textBoxOutlookClientId
+            // 
+            textBoxOutlookClientId.Location = new Point(29, 57);
+            textBoxOutlookClientId.Multiline = true;
+            textBoxOutlookClientId.Name = "textBoxOutlookClientId";
+            textBoxOutlookClientId.Size = new Size(431, 50);
+            textBoxOutlookClientId.TabIndex = 3;
+            // 
+            // labelOutlookClientId
+            // 
+            labelOutlookClientId.AutoSize = true;
+            labelOutlookClientId.Location = new Point(29, 34);
+            labelOutlookClientId.Name = "labelOutlookClientId";
+            labelOutlookClientId.Size = new Size(163, 20);
+            labelOutlookClientId.TabIndex = 1;
+            labelOutlookClientId.Text = "Application (client) ID";
+            // 
             // OK_Button
             // 
             OK_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -637,7 +641,7 @@
             OK_Button.FlatStyle = FlatStyle.Flat;
             OK_Button.Font = new Font("Segoe UI", 12F);
             OK_Button.ForeColor = Color.White;
-            OK_Button.Location = new Point(320, 769);
+            OK_Button.Location = new Point(320, 788);
             OK_Button.Name = "OK_Button";
             OK_Button.Size = new Size(115, 51);
             OK_Button.TabIndex = 2;
@@ -656,7 +660,7 @@
             Cancel_Button.FlatStyle = FlatStyle.Flat;
             Cancel_Button.Font = new Font("Segoe UI", 12F);
             Cancel_Button.ForeColor = Color.White;
-            Cancel_Button.Location = new Point(441, 769);
+            Cancel_Button.Location = new Point(441, 788);
             Cancel_Button.Name = "Cancel_Button";
             Cancel_Button.Size = new Size(115, 51);
             Cancel_Button.TabIndex = 3;
@@ -670,40 +674,45 @@
             // 
             // comboBoxDefaultApi
             // 
-            comboBoxDefaultApi.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             comboBoxDefaultApi.Font = new Font("Segoe UI", 11F);
             comboBoxDefaultApi.FormattingEnabled = true;
-            comboBoxDefaultApi.Items.AddRange(new object[] { "None - Email not configured", "Twillo SendGrid - Best", "Google Gmail - Very Good", "Outlook 365 - Not So Good" });
-            comboBoxDefaultApi.Location = new Point(22, 759);
+            comboBoxDefaultApi.Items.AddRange(new object[] { "Email Disabled", "Twilio SendGrid", "Google Gmail", "Microsoft Outlook 365" });
+            comboBoxDefaultApi.Location = new Point(310, 111);
             comboBoxDefaultApi.Name = "comboBoxDefaultApi";
-            comboBoxDefaultApi.Size = new Size(263, 28);
+            comboBoxDefaultApi.Size = new Size(250, 28);
             comboBoxDefaultApi.TabIndex = 4;
             comboBoxDefaultApi.SelectedIndexChanged += ComboBoxDefaultApi_SelectedIndexChanged;
             // 
             // labelDefaultApi
             // 
-            labelDefaultApi.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             labelDefaultApi.AutoSize = true;
             labelDefaultApi.Font = new Font("Segoe UI", 11F);
             labelDefaultApi.ForeColor = Color.White;
-            labelDefaultApi.Location = new Point(26, 727);
+            labelDefaultApi.Location = new Point(316, 82);
             labelDefaultApi.Name = "labelDefaultApi";
             labelDefaultApi.Size = new Size(149, 20);
             labelDefaultApi.TabIndex = 5;
             labelDefaultApi.Text = "Default API Selection";
             // 
-            // checkBoxSaveToCloud
+            // comboBoxEmailConnection
             // 
-            checkBoxSaveToCloud.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            checkBoxSaveToCloud.AutoSize = true;
-            checkBoxSaveToCloud.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            checkBoxSaveToCloud.ForeColor = Color.White;
-            checkBoxSaveToCloud.Location = new Point(320, 723);
-            checkBoxSaveToCloud.Name = "checkBoxSaveToCloud";
-            checkBoxSaveToCloud.Size = new Size(203, 24);
-            checkBoxSaveToCloud.TabIndex = 6;
-            checkBoxSaveToCloud.Text = "Update Settings to Cloud";
-            checkBoxSaveToCloud.UseVisualStyleBackColor = true;
+            comboBoxEmailConnection.Font = new Font("Segoe UI", 11F);
+            comboBoxEmailConnection.FormattingEnabled = true;
+            comboBoxEmailConnection.Location = new Point(26, 111);
+            comboBoxEmailConnection.Name = "comboBoxEmailConnection";
+            comboBoxEmailConnection.Size = new Size(250, 28);
+            comboBoxEmailConnection.TabIndex = 7;
+            // 
+            // labelConnection
+            // 
+            labelConnection.AutoSize = true;
+            labelConnection.Font = new Font("Segoe UI", 11F);
+            labelConnection.ForeColor = Color.White;
+            labelConnection.Location = new Point(26, 82);
+            labelConnection.Name = "labelConnection";
+            labelConnection.Size = new Size(84, 20);
+            labelConnection.TabIndex = 8;
+            labelConnection.Text = "Connection";
             // 
             // SmtpApiSettingsDialog
             // 
@@ -713,8 +722,9 @@
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.FromArgb(51, 51, 51);
             CancelButton = Cancel_Button;
-            ClientSize = new Size(583, 841);
-            Controls.Add(checkBoxSaveToCloud);
+            ClientSize = new Size(583, 861);
+            Controls.Add(labelConnection);
+            Controls.Add(comboBoxEmailConnection);
             Controls.Add(labelDefaultApi);
             Controls.Add(comboBoxDefaultApi);
             Controls.Add(OK_Button);
@@ -730,6 +740,9 @@
             panelHeeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PbLogo).EndInit();
             tabControlSmtpApiSettings.ResumeLayout(false);
+            tabPageCompanyInfo.ResumeLayout(false);
+            groupBoxCompanyInfo.ResumeLayout(false);
+            groupBoxCompanyInfo.PerformLayout();
             tabPageSendGrid.ResumeLayout(false);
             groupBoxSendGridAPI.ResumeLayout(false);
             groupBoxSendGridAPI.PerformLayout();
@@ -739,9 +752,6 @@
             tabPageOutlook.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
-            tabPageCompanyInfo.ResumeLayout(false);
-            groupBoxCompanyInfo.ResumeLayout(false);
-            groupBoxCompanyInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -773,11 +783,11 @@
         private CheckBox checkBoxSendGridDefault;
         private CheckBox checkBoxGmailDefault;
         private GroupBox groupBox2;
+        private Label labelOutlookConnectionStatus;
+        private Button buttonConnectOutlook;
         private CheckBox checkBoxOutlookDefault;
         private TextBox textBoxOutlookSentFromAddress;
         private Label label1;
-        private TextBox textBoxOutlookClientSecret;
-        private Label labelOutlookClientSecret;
         private TextBox textBoxOutlookClientId;
         private Label labelOutlookClientId;
         private TextBox textBoxOutlookTenantId;
@@ -799,12 +809,11 @@
         private Label labelCompanyName;
         private ComboBox comboBoxRegion;
         private ErrorProvider errorProvider1;
-        private TextBox textBoxGmailServiceId;
-        private Label labelGmailServiceId;
-        private TextBox textBoxGmailApiKey;
-        private Label labelGmailApiKey;
         private Label labelDefaultApi;
         private ComboBox comboBoxDefaultApi;
-        private CheckBox checkBoxSaveToCloud;
+        private Button buttonConnectGmail;
+        private Label labelGmailConnectionStatus;
+        private Label labelConnection;
+        private ComboBox comboBoxEmailConnection;
     }
 }

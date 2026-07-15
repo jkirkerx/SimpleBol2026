@@ -32,11 +32,13 @@ internal static class MongoDbCollectionNames
     public const string BillToAccounts = "BillToAccounts";
     public const string SmtpCredentials = "SmtpCredentials";
     public const string BillingDisputes = "BillingDisputes";
+    public const string EmailTransmissionLogs = "EmailTransmissionLogs";
 
     public static readonly string[] All =
     {
         Accounts, Shippers, Contacts, Pallets, Customers, Vendors, BillOfLadings,
         Countries, Regions, NmfcCodes, FreightClassCodes, RegionsAbbr,
-        ShippingLocations, BillToAccounts, SmtpCredentials, BillingDisputes
+        ShippingLocations, BillToAccounts, SmtpCredentials, BillingDisputes,
+        EmailTransmissionLogs
     };
 }

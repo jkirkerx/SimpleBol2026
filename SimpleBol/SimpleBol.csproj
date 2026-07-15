@@ -45,6 +45,7 @@
     <PackageReference Include="ceTe.DynamicPDF.CoreSuite.NET" Version="12.45.0" />
     <PackageReference Include="CountryCollection" Version="1.1.0" />
     <PackageReference Include="CountryRegion" Version="1.1.1" />
+    <PackageReference Include="Azure.Identity" Version="1.17.2" />
     <PackageReference Include="Google.Apis.Gmail.v1" Version="1.74.0.4162" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />

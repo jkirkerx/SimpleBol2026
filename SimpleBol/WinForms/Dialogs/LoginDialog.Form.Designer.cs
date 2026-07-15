@@ -76,19 +76,21 @@
             // 
             // textBox1
             // 
-            textBox1.Font = new Font("Segoe UI", 12F);
+            textBox1.BorderStyle = BorderStyle.FixedSingle;
+            textBox1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             textBox1.Location = new Point(25, 234);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(327, 29);
+            textBox1.Size = new Size(327, 32);
             textBox1.TabIndex = 1;
             // 
             // textBoxPassword
             // 
-            textBoxPassword.Font = new Font("Segoe UI", 12F);
+            textBoxPassword.BorderStyle = BorderStyle.FixedSingle;
+            textBoxPassword.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             textBoxPassword.Location = new Point(25, 308);
             textBoxPassword.Name = "textBoxPassword";
             textBoxPassword.PasswordChar = '●';
-            textBoxPassword.Size = new Size(327, 29);
+            textBoxPassword.Size = new Size(327, 32);
             textBoxPassword.TabIndex = 2;
             // 
             // labelPassword

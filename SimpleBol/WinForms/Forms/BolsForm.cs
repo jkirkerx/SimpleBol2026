@@ -152,17 +152,11 @@ namespace SimpleBol.WinForms
                     var bol = bolDialogDI.Bol;
                     if (bol != null)
                     {
-                        // Populate the list of Bols
-                        await Task.Delay(2500);
-
+                        // SaveBol has completed before the dialog returns OK, so the
+                        // active list can be refreshed immediately and consistently.
                         _count = await LoadAllBolsByAssignedFilter();
-
-                        Application.DoEvents();
-
                     }
                 }
-
-                Application.DoEvents();
             }
         }
 

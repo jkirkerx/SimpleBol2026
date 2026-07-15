@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SimpleBol.Models.Smtp
 {
-    public class SmtpResponse
+    public class EmailResponse
     {
         public bool Success { get; set; }
         public HttpStatusCode StatusCode { get; set; }
@@ -19,7 +19,7 @@ namespace SimpleBol.Models.Smtp
         public string? ExceptionMessage { get; set; }
 
         // Constructor
-        public SmtpResponse(bool success, HttpStatusCode statusCode, HttpContent? body, HttpResponseHeaders? headers, SmtpError typeError, string? exceptionMessage)
+        public EmailResponse(bool success, HttpStatusCode statusCode, HttpContent? body, HttpResponseHeaders? headers, SmtpError typeError, string? exceptionMessage)
         {
             Success = success;
             StatusCode = statusCode;
