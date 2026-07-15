@@ -14,7 +14,7 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <UseWPF>True</UseWPF>
     <NoWarn>$(NoWarn);WFO1000</NoWarn>
-    <AppVersion>1.0.0.1</AppVersion>
+    <AppVersion>2026.7.15</AppVersion>
     <Version>$(AppVersion)</Version>
     <AssemblyVersion>$(AppVersion)</AssemblyVersion>
     <FileVersion>$(AppVersion)</FileVersion>

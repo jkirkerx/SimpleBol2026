@@ -1,5 +1,6 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-  <Package Name="SimpleBol 2026" Manufacturer="jKirkerx" Version="1.0.0.1" UpgradeCode="F4C98ED9-27DF-486F-9882-77768DA37E8F" Scope="perMachine">
+  <!-- MSI major versions are limited to 255. The public application/release version is 2026.7.15. -->
+  <Package Name="SimpleBol 2026" Manufacturer="jKirkerx" Version="26.7.15" UpgradeCode="F4C98ED9-27DF-486F-9882-77768DA37E8F" Scope="perMachine">
     <MajorUpgrade DowngradeErrorMessage="A newer version of SimpleBol 2026 is already installed." />
     <MediaTemplate EmbedCab="yes" />
     <SetProperty Id="ARPINSTALLLOCATION" Value="[INSTALLFOLDER]" After="CostFinalize" Sequence="both" />
