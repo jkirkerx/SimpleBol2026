@@ -72,25 +72,24 @@ namespace SimpleBol.WinForms
 
         protected async void BolsFormShown(object sender, EventArgs e)
         {
-            // Load the Reconcile Filters
+            // Keep filter events disabled while their data sources and default
+            // selections are initialized. Otherwise the default "no selection"
+            // values overwrite the initial This Week results with an empty list.
+            DisableEventHandlers();
+
             LoadComboBoxReconcile();
-
-            // Default the BOL list to the current week.
-            int bolCount = await LoadAllBolsByReconcile();
-            if (bolCount == 0) { buttonEditBol.Enabled = false; }
-
-            // Load the Async Filters            
             _ = await LoadComboBoxShippers();
             _ = await LoadComboBoxVendors();
             _ = await LoadComboBoxCustomers();
 
-            // Populate every filter summary without changing the active This Week list.
+            // Populate every filter summary before binding the active list.
             await LoadInitialFilterRecordCountsAsync();
 
-            // Enable Event Handlers
-            this.EnableEventHandlers();
+            // Make This Week the final grid bind. LoadAllBolsByReconcile enables
+            // the event handlers after the list has been populated.
+            int bolCount = await LoadAllBolsByReconcile();
+            buttonEditBol.Enabled = bolCount > 0;
 
-            // Return the cursor to default here
             Cursor = Cursors.Default;
         }
 
@@ -263,8 +262,7 @@ namespace SimpleBol.WinForms
                             var printBol = printBolDialogDI.PrintBol;
                             if (printBol != null)
                             {
-
-
+                                _count = await LoadAllBolsByAssignedFilter();
                             }
                         }
 
@@ -314,7 +312,8 @@ namespace SimpleBol.WinForms
             emailBolDialog.customer = customer;
             emailBolDialog.EmailBolId = bolId;
             emailBolDialog.EmailBol = bol;
-            emailBolDialog.ShowDialog(this);
+            if (emailBolDialog.ShowDialog(this) == DialogResult.OK)
+                _count = await LoadAllBolsByAssignedFilter();
         }
 
         #endregion
@@ -378,7 +377,8 @@ namespace SimpleBol.WinForms
             listViewBols.Columns.Add("Quote Price", 100, HorizontalAlignment.Left);
             listViewBols.Columns.Add("Actual Price", 100, HorizontalAlignment.Left);
             listViewBols.Columns.Add("Disputed", 60, HorizontalAlignment.Left);
-            listViewBols.Columns.Add("Printed", 60, HorizontalAlignment.Left);
+            listViewBols.Columns.Add("Print", 30, HorizontalAlignment.Left);
+            listViewBols.Columns.Add("Email", 30, HorizontalAlignment.Left);
             listViewBols.Columns.Add("Pallets", 60, HorizontalAlignment.Left);
             listViewBols.Columns.Add("Packages", 60, HorizontalAlignment.Left);
             listViewBols.Columns.Add("Weight", 60, HorizontalAlignment.Left);
@@ -508,7 +508,7 @@ namespace SimpleBol.WinForms
                         }
 
                         item1.SubItems.Add(getBol.ShipDate.ToLocalTime().ToString());
-                        item1.SubItems.Add(getBol.OrderNumber);
+                        item1.SubItems.Add(getBol.OrderNumber ?? "");
                         item1.SubItems.Add(getBol.CustomerName);
                         item1.SubItems.Add(getBol.ShipperName);
                         item1.SubItems.Add(shipFromLocationCity);
@@ -516,7 +516,8 @@ namespace SimpleBol.WinForms
                         item1.SubItems.Add(getBol.ShipperQuotePrice.ToString("c"));
                         item1.SubItems.Add(getBol.ShipperActualPrice.ToString("c"));
                         item1.SubItems.Add(getBol.Disputed == true ? "?" : "");
-                        item1.SubItems.Add(getBol.Printed == true ? "?" : "");
+                        item1.SubItems.Add(getBol.Printed == true ? "\u2B24" : "");
+                        item1.SubItems.Add(getBol.Emailed == true ? "\u2B24" : "");
                         item1.SubItems.Add(shipPalletsCount.ToString());
                         item1.SubItems.Add(shipPackagesCount.ToString());
                         item1.SubItems.Add(getBol.BolEstimatedWeight.ToString());
@@ -550,6 +551,11 @@ namespace SimpleBol.WinForms
                         if (getBol.Printed == true)
                         {
                             item1.SubItems[10].ForeColor = Color.Green;
+                        }
+
+                        if (getBol.Emailed == true)
+                        {
+                            item1.SubItems[11].ForeColor = Color.Green;
                         }
 
                         item1.UseItemStyleForSubItems = false;
@@ -618,7 +624,7 @@ namespace SimpleBol.WinForms
                 }
 
                 item1.SubItems.Add(getBol.ShipDate.ToLocalTime().ToString());
-                item1.SubItems.Add(getBol.OrderNumber);
+                item1.SubItems.Add(getBol.OrderNumber ?? "");
                 item1.SubItems.Add(getBol.CustomerName);
                 item1.SubItems.Add(getBol.ShipperName);
                 item1.SubItems.Add(shipFromLocationCity);
@@ -626,7 +632,8 @@ namespace SimpleBol.WinForms
                 item1.SubItems.Add(getBol.ShipperQuotePrice.ToString("c"));
                 item1.SubItems.Add(getBol.ShipperActualPrice.ToString("c"));
                 item1.SubItems.Add(getBol.Disputed == true ? "?" : "");
-                item1.SubItems.Add(getBol.Printed == true ? "?" : "");
+                item1.SubItems.Add(getBol.Printed == true ? "\u2B24" : "");
+                item1.SubItems.Add(getBol.Emailed == true ? "\u2B24" : "");
                 item1.SubItems.Add(shipPalletsCount.ToString());
                 item1.SubItems.Add(shipPackagesCount.ToString());
                 item1.SubItems.Add(getBol.BolEstimatedWeight.ToString());
@@ -659,6 +666,11 @@ namespace SimpleBol.WinForms
                 if (getBol.Printed == true)
                 {
                     item1.SubItems[10].ForeColor = Color.Green;
+                }
+
+                if (getBol.Emailed == true)
+                {
+                    item1.SubItems[11].ForeColor = Color.Green;
                 }
 
                 item1.UseItemStyleForSubItems = false;
@@ -716,7 +728,7 @@ namespace SimpleBol.WinForms
             }
 
             item1.SubItems.Add(bol.ShipDate.ToString());
-            item1.SubItems.Add(bol.OrderNumber);
+            item1.SubItems.Add(bol.OrderNumber ?? "");
             item1.SubItems.Add(bol.CustomerName);
             item1.SubItems.Add(bol.ShipperName);
             item1.SubItems.Add(shipFromLocationCity);

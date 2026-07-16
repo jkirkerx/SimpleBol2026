@@ -342,7 +342,7 @@ namespace SimpleBol.WinForms.Dialogs
                         {
                             Document = printDocument,
                             ShowNetwork = true,
-                            UseEXDialog = false                            
+                            UseEXDialog = false
                         };
 
                         try
@@ -430,6 +430,13 @@ namespace SimpleBol.WinForms.Dialogs
 
                                         // Start the printing process.
                                         printDocument.Print();
+                                        if (bolRepository != null)
+                                        {
+                                            await bolRepository.UpdateBillOfLaddingPrintedFlagAsync(
+                                                PrintBolId,
+                                                true);
+                                            PrintBol.Printed = true;
+                                        }
                                         await PrintNotificationClient.NotifySubmittedAsync(
                                             printDocument.PrinterSettings.PrinterName,
                                             printDocument.DocumentName,

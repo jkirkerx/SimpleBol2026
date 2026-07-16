@@ -29,6 +29,8 @@ namespace SimpleBol.Repository.MongoDb
         Task<bool> AddBillOfLaddingAsync(BILLOFLADINGS bol);
         Task<bool> UpdateBillOfLaddingAsync(BILLOFLADINGS bol, string bolId);
         Task<bool> UpdateBillOfLaddingDisputedFlagAsync(string bolId, bool state);
+        Task<bool> UpdateBillOfLaddingPrintedFlagAsync(string bolId, bool state);
+        Task<bool> UpdateBillOfLaddingEmailedFlagAsync(string bolId, bool state);
         Task<bool> RemoveBillOfLaddingAsync(string bolId);
     }
 
@@ -241,6 +243,42 @@ namespace SimpleBol.Repository.MongoDb
             catch (Exception ex)
             {
                 ErrorLogging.NLogException(ex, "MongoDb_UpdateBillOfLaddingDisputedFlagAsync");
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateBillOfLaddingPrintedFlagAsync(string bolId, bool state)
+        {
+            try
+            {
+                var filter = Builders<BILLOFLADINGS>.Filter.Eq(bol => bol.BolId, bolId);
+                var update = Builders<BILLOFLADINGS>.Update
+                    .Set(bol => bol.Printed, state)
+                    .Set(bol => bol.UpdatedOnUtc, DateTime.UtcNow);
+                var result = await _context.BillOfLadings.UpdateOneAsync(filter, update);
+                return result.IsAcknowledged && result.MatchedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogging.NLogException(ex, "MongoDb_UpdateBillOfLaddingPrintedFlagAsync");
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateBillOfLaddingEmailedFlagAsync(string bolId, bool state)
+        {
+            try
+            {
+                var filter = Builders<BILLOFLADINGS>.Filter.Eq(bol => bol.BolId, bolId);
+                var update = Builders<BILLOFLADINGS>.Update
+                    .Set(bol => bol.Emailed, state)
+                    .Set(bol => bol.UpdatedOnUtc, DateTime.UtcNow);
+                var result = await _context.BillOfLadings.UpdateOneAsync(filter, update);
+                return result.IsAcknowledged && result.MatchedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogging.NLogException(ex, "MongoDb_UpdateBillOfLaddingEmailedFlagAsync");
                 throw;
             }
         }

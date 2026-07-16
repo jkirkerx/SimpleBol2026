@@ -92,6 +92,7 @@ namespace SimpleBol.Models.MongoDb
 
         public bool Disputed { get; set; }
         public bool Printed { get; set; }
+        public bool Emailed { get; set; }
         
         [BsonDateTimeOptions]
         public DateTime CreatedOnUtc { get; set; }

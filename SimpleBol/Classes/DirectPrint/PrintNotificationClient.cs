@@ -54,6 +54,27 @@ internal static class PrintNotificationClient
             SubmittedUtc = DateTime.UtcNow
         };
 
+        await SendCommandAsync(command);
+    }
+
+    public static async Task NotifyEmailSentAsync(
+        string documentName,
+        IEnumerable<string> recipients)
+    {
+        var command = new PrintNotificationCommand
+        {
+            RequestId = Guid.NewGuid(),
+            NotificationType = "EmailSent",
+            DocumentName = documentName,
+            Recipients = recipients.Where(recipient => !string.IsNullOrWhiteSpace(recipient)).ToList(),
+            SubmittedUtc = DateTime.UtcNow
+        };
+
+        await SendCommandAsync(command);
+    }
+
+    private static async Task SendCommandAsync(PrintNotificationCommand command)
+    {
         string payload = JsonSerializer.Serialize(command);
 
         for (int attempt = 0; attempt < 5; attempt++)
@@ -113,9 +134,11 @@ internal static class PrintNotificationClient
     private sealed class PrintNotificationCommand
     {
         public Guid RequestId { get; init; }
+        public string NotificationType { get; init; } = "PrintSubmitted";
         public string PrinterName { get; init; } = string.Empty;
         public string DocumentName { get; init; } = string.Empty;
         public int Copies { get; init; }
+        public List<string> Recipients { get; init; } = [];
         public DateTime SubmittedUtc { get; init; }
     }
 }

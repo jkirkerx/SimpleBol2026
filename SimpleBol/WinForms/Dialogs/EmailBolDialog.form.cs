@@ -18,6 +18,7 @@ using SimpleBol.Services.sendEngine;
 using SimpleBol.NewtonSoft;
 using SimpleBol.Services;
 using System.Text.Json;
+using SimpleBol.Classes.DirectPrint;
 
 namespace SimpleBol.WinForms.Dialogs
 {
@@ -47,6 +48,7 @@ namespace SimpleBol.WinForms.Dialogs
         private readonly IGmailSender gmailSender;
         private readonly IOutlook365Sender outlook365Sender;
         private readonly IEmailTransmissionLogRepository emailLogRepository;
+        private readonly IBolsRepository bolRepository;
         private readonly ICurrentUserSession currentUserSession;
         private bool _isGeneratingPdf;
 
@@ -57,6 +59,7 @@ namespace SimpleBol.WinForms.Dialogs
             IGmailSender gmailSender,
             IOutlook365Sender outlook365Sender,
             IEmailTransmissionLogRepository emailLogRepository,
+            IBolsRepository bolRepository,
             ICurrentUserSession currentUserSession)
         {
             InitializeComponent();
@@ -66,6 +69,7 @@ namespace SimpleBol.WinForms.Dialogs
             this.gmailSender = gmailSender;
             this.outlook365Sender = outlook365Sender;
             this.emailLogRepository = emailLogRepository;
+            this.bolRepository = bolRepository;
             this.currentUserSession = currentUserSession;
             Shown += EmailBolDialog_Shown;
             OK_Button.DialogResult = DialogResult.None;
@@ -143,15 +147,15 @@ namespace SimpleBol.WinForms.Dialogs
 
                 listViewPrintTemplates.LargeImageList = largeImages;
                 listViewPrintTemplates.SmallImageList = smallImages;
-                listViewPrintTemplates.Items.Add(new ListViewItem("Print As Squares")
-                {
-                    Name = SquaresDocument,
-                    ImageKey = SquaresDocument
-                });
                 listViewPrintTemplates.Items.Add(new ListViewItem("Print As Lines")
                 {
                     Name = LinesDocument,
                     ImageKey = LinesDocument
+                });
+                listViewPrintTemplates.Items.Add(new ListViewItem("Print As Squares")
+                {
+                    Name = SquaresDocument,
+                    ImageKey = SquaresDocument
                 });
 
                 var savedDocument = PrintSettingsJson.GetSettings()?
@@ -293,8 +297,20 @@ namespace SimpleBol.WinForms.Dialogs
                     throw new InvalidOperationException(detail);
                 }
 
-                MessageBox.Show("The BOL was emailed successfully.", "BOL Sent",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (!string.IsNullOrWhiteSpace(EmailBol.BolId))
+                {
+                    await bolRepository.UpdateBillOfLaddingEmailedFlagAsync(
+                        EmailBol.BolId,
+                        true);
+                    EmailBol.Emailed = true;
+                }
+
+                await PrintNotificationClient.EnsureRunningAsync();
+                var identifier = EmailBol.BolNumber ?? EmailBol.OrderNumber ?? EmailBol.BolId ?? "BOL";
+                await PrintNotificationClient.NotifyEmailSentAsync(
+                    $"Bill of Lading {identifier}",
+                    SelectedEmailAddresses);
+
                 DialogResult = DialogResult.OK;
                 Close();
             }

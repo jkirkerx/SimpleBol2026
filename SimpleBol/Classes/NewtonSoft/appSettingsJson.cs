@@ -500,17 +500,10 @@ namespace SimpleBol.NewtonSoft
 
         public static SmtpApiSettings? GetSmtpApiSettings()
         {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var appPath = appData + Properties.Resources.AppSettingsJsonPath;
-            
-            var oRootObject = JsonConvert.DeserializeObject<RootObject>(File.ReadAllText(appPath));
-            if (oRootObject != null)
-            {
-                return oRootObject.SmtpApiSettings;
-            }
-
-            return null;
-            
+            // SmtpApiSettings is a compatibility alias and is intentionally not
+            // serialized. GetSettings normalizes EmailConnections and points the
+            // alias at the currently active company/email profile.
+            return GetSettings()?.SmtpApiSettings;
         }
     }
 }

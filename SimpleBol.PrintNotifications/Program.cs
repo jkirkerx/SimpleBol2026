@@ -96,12 +96,10 @@ internal sealed class PrintNotificationContext : ApplicationContext
 
                 PrintNotificationCommand? command =
                     JsonSerializer.Deserialize<PrintNotificationCommand>(json);
-                if (command is null ||
-                    string.IsNullOrWhiteSpace(command.PrinterName) ||
-                    string.IsNullOrWhiteSpace(command.DocumentName))
+                if (command is null || string.IsNullOrWhiteSpace(command.DocumentName))
                     continue;
 
-                _syncContext.Post(_ => RegisterPrintJob(command), null);
+                _syncContext.Post(_ => RegisterNotification(command), null);
             }
             catch (OperationCanceledException)
             {
@@ -120,6 +118,24 @@ internal sealed class PrintNotificationContext : ApplicationContext
                 }
             }
         }
+    }
+
+    private void RegisterNotification(PrintNotificationCommand command)
+    {
+        if (command.NotificationType.Equals("EmailSent", StringComparison.OrdinalIgnoreCase))
+        {
+            string recipients = command.Recipients.Count == 0
+                ? "Recipient not specified"
+                : string.Join(", ", command.Recipients);
+            ShowNotification(
+                "SimpleBol email sent",
+                $"{command.DocumentName}{Environment.NewLine}To: {recipients}",
+                ToolTipIcon.Info);
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(command.PrinterName))
+            RegisterPrintJob(command);
     }
 
     private void RegisterPrintJob(PrintNotificationCommand command)
@@ -313,9 +329,11 @@ internal sealed class PendingPrintJob(PrintNotificationCommand command)
 internal sealed class PrintNotificationCommand
 {
     public Guid RequestId { get; init; }
+    public string NotificationType { get; init; } = "PrintSubmitted";
     public string PrinterName { get; init; } = string.Empty;
     public string DocumentName { get; init; } = string.Empty;
     public int Copies { get; init; }
+    public List<string> Recipients { get; init; } = [];
     public DateTime SubmittedUtc { get; init; }
 }
 

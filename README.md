@@ -1,1 +1,0 @@
-# SimpleBol2026

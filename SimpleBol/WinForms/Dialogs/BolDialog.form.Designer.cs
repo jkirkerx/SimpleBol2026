@@ -299,9 +299,6 @@
             OK_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             OK_Button.BackColor = Color.FromArgb(60, 60, 60);
             OK_Button.Cursor = Cursors.Hand;
-            // SaveBol is asynchronous. The click handler sets DialogResult only after
-            // the database operation completes successfully.
-            OK_Button.DialogResult = DialogResult.None;
             OK_Button.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
             OK_Button.FlatAppearance.BorderSize = 0;
             OK_Button.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
@@ -1984,7 +1981,6 @@
             buttonPrint.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonPrint.BackColor = Color.FromArgb(60, 60, 60);
             buttonPrint.Cursor = Cursors.Hand;
-            buttonPrint.DialogResult = DialogResult.OK;
             buttonPrint.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
             buttonPrint.FlatAppearance.BorderSize = 0;
             buttonPrint.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
@@ -1992,7 +1988,7 @@
             buttonPrint.FlatStyle = FlatStyle.Flat;
             buttonPrint.Font = new Font("Segoe UI", 12F);
             buttonPrint.ForeColor = Color.White;
-            buttonPrint.Location = new Point(1189, 1031);
+            buttonPrint.Location = new Point(931, 1031);
             buttonPrint.Margin = new Padding(3, 4, 3, 4);
             buttonPrint.Name = "buttonPrint";
             buttonPrint.Size = new Size(131, 51);
@@ -2006,7 +2002,6 @@
             buttonEmail.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonEmail.BackColor = Color.FromArgb(60, 60, 60);
             buttonEmail.Cursor = Cursors.Hand;
-            buttonEmail.DialogResult = DialogResult.OK;
             buttonEmail.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
             buttonEmail.FlatAppearance.BorderSize = 0;
             buttonEmail.FlatAppearance.MouseDownBackColor = Color.RoyalBlue;
@@ -2014,7 +2009,7 @@
             buttonEmail.FlatStyle = FlatStyle.Flat;
             buttonEmail.Font = new Font("Segoe UI", 12F);
             buttonEmail.ForeColor = Color.White;
-            buttonEmail.Location = new Point(1040, 1031);
+            buttonEmail.Location = new Point(1068, 1031);
             buttonEmail.Margin = new Padding(3, 4, 3, 4);
             buttonEmail.Name = "buttonEmail";
             buttonEmail.Size = new Size(131, 51);

@@ -14,7 +14,7 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <UseWPF>True</UseWPF>
     <NoWarn>$(NoWarn);WFO1000</NoWarn>
-    <AppVersion>2026.7.15</AppVersion>
+    <AppVersion>2026.07.16</AppVersion>
     <Version>$(AppVersion)</Version>
     <AssemblyVersion>$(AppVersion)</AssemblyVersion>
     <FileVersion>$(AppVersion)</FileVersion>
@@ -23,6 +23,7 @@
     <ApplicationIcon>Assets\Artwork\simpleBolIcon512.ico</ApplicationIcon>
     <Description>A simple program to help you generate BOLs for your global shipping needs</Description>
     <PackageIcon>simpleBolIcon512.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <DefaultItemExcludes>$(DefaultItemExcludes);SimpleBol.PrintNotifications\**;SimpleBol.Installer\**</DefaultItemExcludes>
   </PropertyGroup>
 
@@ -79,6 +80,10 @@
 
   <ItemGroup>
     <None Update="Assets\Artwork\simpleBolIcon512.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

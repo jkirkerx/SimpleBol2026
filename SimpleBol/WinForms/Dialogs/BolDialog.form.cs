@@ -3543,7 +3543,8 @@ namespace SimpleBol.WinForms.Dialogs
             emailBolDialog.customer = customer;
             emailBolDialog.EmailBolId = BolId;
             emailBolDialog.EmailBol = bol;
-            emailBolDialog.ShowDialog(this);
+            if (emailBolDialog.ShowDialog(this) == DialogResult.OK && this.Bol != null)
+                this.Bol.Emailed = true;
         }
 
         private async void ButtonPrint_Click(global::System.Object sender, global::System.EventArgs e)
@@ -3567,8 +3568,9 @@ namespace SimpleBol.WinForms.Dialogs
                             var printBol = printBolDialogDI.PrintBol;
                             if (printBol != null)
                             {
-
-
+                                // Preserve the repository flag if this open BOL
+                                // is saved after printing.
+                                this.Bol.Printed = printBol.Printed;
                             }
                         }
 
